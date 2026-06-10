@@ -15,6 +15,7 @@ let eventTimer = 0;
 let eventCooldown = 0;
 let currentWhale = null;
 let lastHitEffectTime = 0;
+let autoAimFish = null;
 
 const MAX_EFFECTS = 30;
 const HIT_EFFECT_COOLDOWN = 0.05;
@@ -155,6 +156,16 @@ if (window.__renderer) {
 
 // 3) scene 새로 생성
 const scene = new THREE.Scene();
+
+const fireBtn = document.getElementById("fireBtn");
+
+fireBtn.addEventListener("touchstart", () => {
+    shooting = true;
+});
+
+fireBtn.addEventListener("touchend", () => {
+    shooting = false;
+});
 
 //scene.add(new THREE.AxesHelper(10));     //    화면에 중심을 알려주는 좌표
 
@@ -500,6 +511,23 @@ function setNewTarget(fish) {
         (Math.random() - 0.5) * BOUNDS.z
     );
 }
+function getNearestFish() {
+
+    let nearest = null;
+    let minDist = Infinity;
+
+    fishes.forEach(f => {
+
+        const d = f.position.distanceTo(camera.position);
+
+        if (d < AUTO_AIM_DISTANCE && d < minDist) {
+            minDist = d;
+            nearest = f;
+        }
+    });
+
+    return nearest;
+}
 
 /* =========================
    MODEL CACHE
@@ -554,6 +582,10 @@ function canSpawnHitEffect() {
 
     if (now - lastHitEffectTime < HIT_EFFECT_COOLDOWN) {
         return false;
+    }
+    if (effects.length > MAX_EFFECTS) {
+    const old = effects.shift();
+    scene.remove(old);
     }
 
     lastHitEffectTime = now;
@@ -889,6 +921,7 @@ const mouse = new THREE.Vector2();
 const aimPoint = new THREE.Vector3();
 
 let lockedFish = null;
+const AUTO_AIM_DISTANCE = 6;
 
 window.addEventListener("mousemove", (e) => {
 
@@ -920,6 +953,59 @@ raycaster.ray.intersectPlane(
 );
 });
 
+/* =========================
+   📱 MOBILE TOUCH AIM + SHOOT
+========================= */
+
+window.addEventListener("touchstart", (e) => {
+
+    unlockAudio();
+    startBGM();
+
+    shooting = true;
+
+}, { passive: true });
+
+window.addEventListener("touchend", () => {
+
+    shooting = false;
+
+}, { passive: true });
+
+window.addEventListener("touchmove", (e) => {
+    
+    const rect = renderer.domElement.getBoundingClientRect();
+    const touch = e.touches[0];
+
+    mouse.x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    const hits = raycaster.intersectObjects(fishes, true);
+
+    if (hits.length > 0) {
+
+        let obj = hits[0].object;
+
+        while (obj && !obj.userData?.hp) obj = obj.parent;
+
+        lockedFish = obj;
+
+    } else {
+        lockedFish = null;
+    }
+
+    const plane = new THREE.Plane(
+        new THREE.Vector3(0, 1, 0),
+        0
+    );
+
+    raycaster.ray.intersectPlane(plane, aimPoint);
+    autoAimFish = getNearestFish();
+
+}, { passive: true });
+
 let shooting = false;
 let shootTimer = 0;
 const fireRate = 0.12;
@@ -947,7 +1033,7 @@ muzzle.getWorldPosition(muzzlePos);
 // 총알을 총구 위치에 생성
 bullet.position.copy(muzzlePos);
 
-const target = aimPoint;
+const target = autoAimFish ? autoAimFish.position : aimPoint;
 
 const dir = target.clone()
     .sub(muzzlePos)
@@ -1099,7 +1185,7 @@ function animate() {
         spawnTimer = 0;
         spawnFish();
     }
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.02) {
     spawnFloorBubble();
     }
     
@@ -1120,11 +1206,14 @@ function animate() {
 ========================= */
 
     fishes.forEach(fish => {
-        
-    // ⭐ 핵심 추가
-      clampPosition(fish.position);
 
-       // ⭐ 벽 반사 로직  벽에 부딪히면 되돌아오는 코드
+    const distToCam = fish.position.distanceTo(camera.position);
+    const isFar = distToCam > 25;
+
+    // ⭐ 바닥/벽 제한
+    clampPosition(fish.position);
+
+    // ⭐ 벽 반사 로직
     if (fish.position.x > BOUNDS.x / 2 || fish.position.x < -BOUNDS.x / 2) {
         fish.userData.smoothDir.x *= -1;
     }
@@ -1133,13 +1222,26 @@ function animate() {
         fish.userData.smoothDir.z *= -1;
     }
 
-        const target = fish.userData.target;
+    // ⭐ temp vector 초기화
+    if (!fish.userData._tempVec) {
+        fish.userData._tempVec = new THREE.Vector3();
+    }
 
-        if (fish.position.distanceTo(target) < 1.5) {
-            setNewTarget(fish);
-        }
+    const target = fish.userData.target;
 
-        const dir = new THREE.Vector3()
+    // ⭐ 목표 갱신
+    if (fish.position.distanceTo(target) < 1.5) {
+        setNewTarget(fish);
+    }
+
+    // =========================
+    // 🧠 LOD AI (핵심 최적화)
+    // =========================
+
+    if (!isFar) {
+
+        // 🔥 가까운 물고기: 정상 AI
+        const dir = fish.userData._tempVec
             .subVectors(target, fish.position)
             .normalize();
 
@@ -1149,24 +1251,39 @@ function animate() {
             fish.userData.smoothDir.clone().multiplyScalar(fish.userData.speed)
         );
 
-        fish.rotation.y = THREE.MathUtils.lerp(
-            fish.rotation.y,
-            Math.atan2(fish.userData.smoothDir.x, fish.userData.smoothDir.z),
-            fish.userData.turnSpeed
+    } else {
+
+        // 🔥 먼 물고기: 단순 이동 (CPU 절약)
+        fish.position.add(
+            fish.userData.smoothDir.clone().multiplyScalar(fish.userData.speed * 0.5)
         );
-        const swim =
-                performance.now() * 0.004 +
-                fish.userData.swimOffset;
+    }
 
-            // 좌우 흔들림
-            fish.rotation.z =
-                Math.sin(swim) *
-                fish.userData.swimPower;
+    // =========================
+    // 🎯 회전 (항상 적용)
+    // =========================
 
-            // 살짝 끄덕임
-            fish.rotation.x =
-                Math.cos(swim * 0.5) * 0.04;
-                });
+    fish.rotation.y = THREE.MathUtils.lerp(
+        fish.rotation.y,
+        Math.atan2(fish.userData.smoothDir.x, fish.userData.smoothDir.z),
+        fish.userData.turnSpeed
+    );
+
+    // =========================
+    // 🌊 물고기 자연 애니메이션
+    // =========================
+
+    const swim =
+        performance.now() * 0.004 + fish.userData.swimOffset;
+
+    // 좌우 흔들림
+    fish.rotation.z =
+        Math.sin(swim) * fish.userData.swimPower;
+
+    // 살짝 끄덕임
+    fish.rotation.x =
+        Math.cos(swim * 0.5) * 0.04;
+});
 
 /* =========================
    총알 이동 + 생명시간
@@ -1338,4 +1455,5 @@ function animate() {
     camera.updateProjectionMatrix();
 
     renderer.setSize(oceanArea.clientWidth, oceanArea.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 });
