@@ -156,7 +156,7 @@ if (window.__renderer) {
 // 3) scene 새로 생성
 const scene = new THREE.Scene();
 
-//scene.add(new THREE.AxesHelper(10));
+//scene.add(new THREE.AxesHelper(10));     //    화면에 중심을 알려주는 좌표
 
 /* 🌊 배경 + 안개 */
 const textureLoader = new THREE.TextureLoader();
