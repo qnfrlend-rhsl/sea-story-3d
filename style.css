@@ -1,0 +1,160 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+
+    background:#000;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* 게임기 전체 */
+#cabinet{
+
+    aspect-ratio: 720 / 1280;
+
+    height:95vh;
+
+    display:flex;
+    flex-direction:column;
+
+    border:4px solid #444;
+    background:#000;
+}
+
+/* 위 4 */
+#oceanArea{
+    flex:4;
+
+    background:linear-gradient(
+        to bottom,
+        #0088cc,
+        #003355
+    );
+
+    overflow:hidden;
+    position:relative;
+}
+
+/* 아래 3 */
+#slotArea{
+    flex:3;
+
+    background:#111;
+
+    border-top:3px solid #555;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#slotPanel{
+
+    width:92%;
+    height:85%;
+
+    border:3px solid gold;
+    border-radius:15px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+    font-size:42px;
+    font-weight:bold;
+}
+
+#bonusEvent{
+    position:absolute;
+    top:35%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    text-align:center;
+
+    opacity:0;
+    pointer-events:none;
+    z-index:9999;
+
+    animation: eventShake 0.6s infinite;
+}
+
+@keyframes eventShake{
+    0%   { transform:translate(-50%, -50%) rotate(0deg); }
+    25%  { transform:translate(-49%, -51%) rotate(-1deg); }
+    50%  { transform:translate(-50%, -50%) rotate(1deg); }
+    75%  { transform:translate(-51%, -49%) rotate(-1deg); }
+    100% { transform:translate(-50%, -50%) rotate(0deg); }
+}
+
+#bonusTitle{
+    font-size:42px;
+    font-weight:900;
+    color:gold;
+
+    animation:bonusFlash 1.2s infinite;
+
+    text-shadow:
+        0 0 5px #fff,
+        0 0 15px gold,
+        0 0 30px gold,
+        0 0 60px orange;
+
+    transform: scale(1);
+}
+
+#bonusName{
+    margin-top:10px;
+
+    font-size:18px;
+    font-weight:bold;
+
+    color:white;
+
+    text-shadow:
+        0 0 10px #fff,
+        0 0 20px #66ccff;
+}
+
+@keyframes bonusFlash{
+
+    0%{
+        opacity:1;
+        transform:scale(1);
+        filter:brightness(1);
+    }
+
+    25%{
+        opacity:0.6;
+        transform:scale(1.15);
+        filter:brightness(2);
+    }
+
+    50%{
+        opacity:1;
+        transform:scale(0.95);
+        filter:brightness(0.8);
+    }
+
+    75%{
+        opacity:0.8;
+        transform:scale(1.2);
+        filter:brightness(2.5);
+    }
+
+    100%{
+        opacity:1;
+        transform:scale(1);
+        filter:brightness(1);
+    }
+}
