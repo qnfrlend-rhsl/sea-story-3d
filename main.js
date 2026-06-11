@@ -23,7 +23,7 @@ const MAX_BULLETS = 50;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 20;
+const MAX_FISH = 10;
 const FLOOR_Y = -3;
 function addScore(value) {
     score += value;
@@ -81,7 +81,7 @@ function playHit() {
    🎵 BGM
 ========================= */
 sounds.bgm.loop = true;
-sounds.bgm.volume = 0.5;
+sounds.bgm.volume = 0.8;
 
 let bgmStarted = false;
 
@@ -93,7 +93,7 @@ function startBGM() {
     if (bgmStarted && !bgm.paused) return;
 
     bgm.loop = true;
-    bgm.volume = 0.4;
+    bgm.volume = 0.8;
     bgm.muted = false;
 
     const playPromise = bgm.play();
@@ -385,9 +385,9 @@ const FISH_MODELS = [
     // 🐟 일반 물고기
     // ======================
     { url: "./models/fish.glb", weight: 40, speed: 0.02, turnSpeed: 0.2, scale: 0.05, hp: 1, score: 10, type: "normal" },
-    { url: "./models/fish2.glb", weight: 50, speed: 0.035, turnSpeed: 0.08, scale: 0.20, hp: 3, score: 30, type: "normal" },
-    { url: "./models/fish3.glb", weight: 5, speed: 0.012, turnSpeed: 0.03, scale: 0.05, hp: 5, score: 30, type: "normal" },
-    { url: "./models/fish4.glb", weight: 3, speed: 0.012, turnSpeed: 0.03, scale: 0.2, hp: 10, score: 30, type: "normal" },
+    { url: "./models/fish2.glb", weight: 50, speed: 0.050, turnSpeed: 0.08, scale: 0.20, hp: 3, score: 30, type: "normal" },
+    { url: "./models/fish3.glb", weight: 5, speed: 0.050, turnSpeed: 0.03, scale: 0.05, hp: 5, score: 30, type: "normal" },
+    { url: "./models/fish4.glb", weight: 3, speed: 0.025, turnSpeed: 0.03, scale: 0.2, hp: 10, score: 30, type: "normal" },
 
     // ======================
     // 🦈🐋🐢 이벤트 물고기 (통합됨)
@@ -402,6 +402,13 @@ const mixers = [];
 const bullets = [];
 const effects = [];
 const floorBubbles = [];
+
+/* =========================
+   🐟 DEBUG MONITOR
+========================= */
+// setInterval(() => {
+//     console.log("🐟 fish count:", fishes.length);
+// }, 3000);
 
 function spawnFloorBubble() {
 
@@ -636,7 +643,13 @@ function spawnHitEffect(pos) {
 
 function spawnFish() {
 
-    if (fishes.length >= MAX_FISH) return;
+    //if (fishes.length >= MAX_FISH) return;
+
+    const normalFishCount = fishes.reduce((count, f) => {
+    return count + (f.userData?.type === "normal" ? 1 : 0);
+    }, 0);
+
+    if (normalFishCount >= MAX_FISH) return;
 
     // 일반 물고기만 필터링
     const normalFishModels = FISH_MODELS.filter(f => f.type === "normal");
@@ -1015,10 +1028,22 @@ window.addEventListener("mouseup", () => shooting = false);
 
 
 
-function shoot() {      //////////////////////////////////  총소리 볼륨
-    sounds.shoot.currentTime = 0;
-    sounds.shoot.volume = 0.2 * sfxVolume; 
-    sounds.shoot.play().catch(() => {});
+let lastShootSound = 0;
+
+function shoot() {
+
+    const now = performance.now();
+
+    if (now - lastShootSound > 80) {
+
+        const s = sounds.shoot.cloneNode();
+
+        s.volume = 0.08 * sfxVolume;
+
+        s.play().catch(()=>{});
+
+        lastShootSound = now;
+    }
 
     const bullet = new THREE.Mesh(
     new THREE.SphereGeometry(0.05, 6, 6),
@@ -1181,7 +1206,7 @@ function animate() {
 ========================= */
 
     spawnTimer += delta;
-    if (spawnTimer > 0.7) {
+    if (spawnTimer > 1.2) {
         spawnTimer = 0;
         spawnFish();
     }
@@ -1309,7 +1334,7 @@ function animate() {
     const fish = fishes[j];
 
     const hitRadius =
-        fish.userData.type === "shark" ? 1.5 : 0.5;
+        fish.userData.type === "shark" ? 2.5 : 1.2;        //   물고기 타격수치로 맞으면 죽는 수치(낮으면 잘 안죽음)
 
     const hitRadiusSq = hitRadius * hitRadius;
 
@@ -1340,7 +1365,22 @@ function animate() {
                 sharkDie();
 
                 scene.remove(fish);
-                fishes.splice(j, 1);
+
+// fishes 제거
+const idx = fishes.indexOf(fish);
+if (idx !== -1) {
+    fishes.splice(idx, 1);
+}
+
+// mixers는 안전하게 따로 찾기
+const mIdx = mixers.findIndex(m => m._root === fish);
+if (mIdx !== -1) {
+    mixers.splice(mIdx, 1);
+}
+console.log("🐟 spawn check:", {
+    total: fishes.length,
+    normal: fishes.filter(f => f.userData?.type === "normal").length
+});
             }
         }
 
