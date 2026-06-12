@@ -17,18 +17,8 @@ let currentWhale = null;
 let lastHitEffectTime = 0;
 let autoAimFish = null;
 let gameMode = "PLAY";
+let currentSlotSound = null;
 
-
-const slotAudio = new Audio("./sounds/slot_spin.mp3");
-slotAudio.preload = "auto";
-slotAudio.load();
-slotAudio.volume = 0.5;
-
-function playSlotSound() {
-    const s = new Audio("./sounds/slot_spin.mp3");
-    s.volume = 0.6;
-    s.play().catch(() => {});
-}
 
 const MAX_EFFECTS = 30;
 const HIT_EFFECT_COOLDOWN = 0.05;
@@ -61,9 +51,15 @@ const sounds = {
     slot_stop: new Audio("./sounds/slot_stop.mp3"),
     slot_win: new Audio("./sounds/slot_win.mp3"),
     slot_jackpot: new Audio("./sounds/slot_jackpot.mp3"),
+
+
+       // 🎰 jackpot 사운드
+    small_win: new Audio("./sounds/small_win.mp3"),
+    big_win: new Audio("./sounds/big_win.mp3"),
+    jackpot_win: new Audio("./sounds/jackpot_win.mp3"),
 };
 function playSfx(audio, volume = 0.5) {
-    const s = new Audio(audio.src);
+    const s = audio.cloneNode();
     s.volume = volume * sfxVolume;
     s.play().catch(() => {});
 }
@@ -76,17 +72,19 @@ function unlockAudio() {
 
     Object.entries(sounds).forEach(([key, s]) => {
 
-        // 🔥 BGM은 제외 (핵심)
-        if (key === "bgm") return;
+    if (
+        key === "bgm" ||
+        key === "slot_spin"
+    ) return;
 
-        s.muted = true;
+    s.muted = true;
 
-        s.play().then(() => {
-            s.pause();
-            s.currentTime = 0;
-            s.muted = false;
-        }).catch(() => {});
-    });
+    s.play().then(() => {
+        s.pause();
+        s.currentTime = 0;
+        s.muted = false;
+    }).catch(() => {});
+});
 
     console.log("🔊 AUDIO UNLOCKED");
 }
@@ -143,17 +141,12 @@ let audioUnlocked = false;
 window.addEventListener("click", () => {
 
     if (audioUnlocked) return;
+
     audioUnlocked = true;
 
-    const s = new Audio("./sounds/slot_spin.mp3");
-    s.volume = 0;
+    unlockAudio();
 
-    s.play()
-        .then(() => {
-            s.pause();
-            s.currentTime = 0;
-        })
-        .catch(() => {});
+    startBGM();
 
 }, { once: true });
 
@@ -369,28 +362,45 @@ function onColumnStopped() {
 
     if (stopCount >= 4) {
 
-        stopCount = 0;
-
-        setTimeout(() => {
-
-            const win = checkWin(finalGrid);
-
-            if (finalResult === "JACKPOT") {
-                showBonusEvent("🐋 JACKPOT!", "34px");
-            }
-            else if (finalResult === "BIGWIN") {
-                showBonusEvent("💰 BIG WIN!", "26px");
-            }
-            else if (finalResult === "SMALLWIN") {
-                showBonusEvent("🔥 SMALL WIN!", "22px");
-            }
-
-            slotRunning = false;
-            gameMode = "PLAY";
-            shootTimer = 0;
-
-        }, 500);
+    // 슬롯 회전음 정지
+    if (currentSlotSound) {
+        currentSlotSound.pause();
+        currentSlotSound.currentTime = 0;
+        currentSlotSound = null;
     }
+
+    stopCount = 0;
+
+    setTimeout(() => {
+
+    const win = checkWin(finalGrid);
+
+    if (finalResult === "JACKPOT") {
+
+        playSfx(sounds.jackpot_win, 1.0);
+        showBonusEvent("🐋 JACKPOT!", "34px");
+
+    }
+    else if (finalResult === "BIGWIN") {
+
+        playSfx(sounds.big_win, 0.8);
+        showBonusEvent("💰 BIG WIN!", "26px");
+
+    }
+    else if (finalResult === "SMALLWIN") {
+
+        playSfx(sounds.small_win, 0.7);
+        showBonusEvent("🔥 SMALL WIN!", "22px");
+    }
+
+    // ⭐ 이거 반드시 있어야 함
+    slotRunning = false;
+    gameMode = "PLAY";
+    shootTimer = 0;
+    startBGM();
+
+}, 500);
+  }
 }
 
 // =========================
@@ -446,6 +456,8 @@ function checkWin(grid) {
     return "NOTHING";
 }
 
+
+
 // =========================
 // 🎰 실행
 // =========================
@@ -453,19 +465,21 @@ function checkWin(grid) {
 function spinSlot() {
 
     if (slotRunning) return;
+
+    currentSlotSound = sounds.slot_spin.cloneNode();
+
+    currentSlotSound.volume = 0.6 * sfxVolume;
+
+    currentSlotSound.currentTime = 0;
+
+    currentSlotSound.play().catch(()=>{});
+
     slotRunning = true;
 
     gameMode = "SLOT";
 
     shooting = false;
     shootTimer = 0;
-
-    // ⭐ 핵심: 무조건 가장 먼저
-    function playSlotSound() {
-    const s = new Audio("./sounds/slot_spin.mp3");
-    s.volume = 0.6;
-    s.play();
-}
 
     finalResult = getSlotResult();
     finalGrid = generateFinalGrid(finalResult);
@@ -481,6 +495,8 @@ function spinSlot() {
     setTimeout(() => stopCol("col2"), 2000);
     setTimeout(() => stopCol("col4"), 3000);
     setTimeout(() => stopCol("col3"), 3800);
+
+    if (slotRunning) return;
 }
 
 spinBtn.addEventListener("click", spinSlot);
@@ -1158,6 +1174,8 @@ function startSharkEvent() {
 ========================= */
 function startWhaleEvent() {
 
+    if (currentEvent) return;
+
     const whale = FISH_MODELS.find(f => f.type === "whale");
 
     currentEvent = "WHALE";
@@ -1166,13 +1184,11 @@ function startWhaleEvent() {
     sounds.whale_theme.volume = 0.5 * sfxVolume;
     sounds.whale_theme.play().catch(() => {});
 
-    const count = 1
-
-    if (currentEvent) return;
+    spawnSpecialFish(WHALE);
 
     addScore(whale.spawnBonus);
 
-   showBonusEvent("🐋 WHALE APPEARS!", "20px");
+    showBonusEvent("🐋 WHALE APPEARS!", "20px");
 
     setTimeout(() => {
         endWhaleEvent();
