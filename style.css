@@ -59,20 +59,22 @@ body{
 }
 
 #slotPanel{
-
     width:92%;
     height:85%;
 
     border:3px solid gold;
     border-radius:15px;
 
+    position:relative;
+
     display:flex;
-    justify-content:center;
+    flex-direction:column;
+    justify-content:flex-start;
     align-items:center;
 
     color:white;
-    font-size:42px;
-    font-weight:bold;
+
+    padding-top:10px;
 }
 
 #bonusEvent{
@@ -171,4 +173,122 @@ body{
     font-size: 16px;
     border: none;
     z-index: 999;
+}
+
+/* ===== SLOT MACHINE UI ===== */
+
+.slot-header {
+    position: absolute;
+    top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: gold;
+    text-shadow: 0 0 10px #ffcc00;
+}
+
+.slot-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 40px;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.cell {
+     width: 60px;
+    height: 55px; 
+
+    background: transparent;
+    border: none;
+    border-radius: 0;
+
+    font-size: 46px;
+    -webkit-user-select: none;
+    user-select: none;
+
+    -webkit-touch-callout: none; /* 길게 눌렀을 때 메뉴 방지 */
+    -webkit-tap-highlight-color: transparent; /* 터치 하이라이트 제거 */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell.spinning {
+    transform: scale(1.1);
+    filter: brightness(2);
+}
+
+.col {
+    width: 80px;
+    height: 200px;        /* 3칸 보이는 영역 */
+    overflow: hidden;     /* ⭐ 릴 핵심 */
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#spinBtn {
+    position: absolute;
+    bottom: 20px;   /* 🔥 맨 아래 고정 */
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 100px;
+    height: 38px;
+
+    border-radius: 12px;
+
+    background: linear-gradient(145deg, #ffe066, #ff8c00);
+
+    border: 3px solid #fff2b0;
+
+    color: #2b1b00;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow:
+        0 7px 0 #a85a00,
+        0 20px 30px rgba(0,0,0,0.6),
+        inset 0 2px 8px rgba(255,255,255,0.6);
+
+    text-shadow: 0 2px 0 rgba(255,255,255,0.3);
+
+    transition: all 0.12s ease;
+
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* hover */
+#spinBtn:hover {
+    transform: translateX(-50%) scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* click */
+#spinBtn:active {
+    transform: translateX(-50%) translateY(4px) scale(0.98);
+
+    box-shadow:
+        0 4px 0 #a85a00,
+        0 10px 20px rgba(0,0,0,0.5),
+        inset 0 2px 6px rgba(0,0,0,0.3);
 }

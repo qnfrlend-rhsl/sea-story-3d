@@ -16,6 +16,19 @@ let eventCooldown = 0;
 let currentWhale = null;
 let lastHitEffectTime = 0;
 let autoAimFish = null;
+let gameMode = "PLAY";
+
+
+const slotAudio = new Audio("./sounds/slot_spin.mp3");
+slotAudio.preload = "auto";
+slotAudio.load();
+slotAudio.volume = 0.5;
+
+function playSlotSound() {
+    const s = new Audio("./sounds/slot_spin.mp3");
+    s.volume = 0.6;
+    s.play().catch(() => {});
+}
 
 const MAX_EFFECTS = 30;
 const HIT_EFFECT_COOLDOWN = 0.05;
@@ -23,7 +36,7 @@ const MAX_BULLETS = 50;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 10;
+const MAX_FISH = 10;                      //////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 function addScore(value) {
     score += value;
@@ -42,7 +55,19 @@ const sounds = {
     turtle_theme: new Audio("./sounds/turtle_theme.mp3"),
     shark_spawn: new Audio("./sounds/shark_spawn.mp3"),
     shark_die: new Audio("./sounds/shark_die.mp3"),
+
+        // 🎰 SLOT SOUND 추가
+    slot_spin: new Audio("./sounds/slot_spin.mp3"),
+    slot_stop: new Audio("./sounds/slot_stop.mp3"),
+    slot_win: new Audio("./sounds/slot_win.mp3"),
+    slot_jackpot: new Audio("./sounds/slot_jackpot.mp3"),
 };
+function playSfx(audio, volume = 0.5) {
+    const s = new Audio(audio.src);
+    s.volume = volume * sfxVolume;
+    s.play().catch(() => {});
+}
+
 
 /* =========================
    🔊 AUDIO UNLOCK
@@ -113,10 +138,22 @@ function startBGM() {
 /* =========================
    🖱️ FIRST CLICK INIT
 ========================= */
+let audioUnlocked = false;
+
 window.addEventListener("click", () => {
 
-    unlockAudio();
-    startBGM();
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+
+    const s = new Audio("./sounds/slot_spin.mp3");
+    s.volume = 0;
+
+    s.play()
+        .then(() => {
+            s.pause();
+            s.currentTime = 0;
+        })
+        .catch(() => {});
 
 }, { once: true });
 
@@ -157,15 +194,303 @@ if (window.__renderer) {
 // 3) scene 새로 생성
 const scene = new THREE.Scene();
 
-const fireBtn = document.getElementById("fireBtn");
 
-fireBtn.addEventListener("touchstart", () => {
-    shooting = true;
+
+////////////////////////////////////////////////////////////
+///////////////////////슬롯 코드////////////////////////////
+///////////////////////////////////////////////////////////
+
+
+const SLOT_CONFIG = {
+    jackpot: 0.5,
+    bigWin: 5,
+    smallWin: 15,
+};
+
+// =========================
+// 🎯 SYMBOLS (무조건 최상단)
+// =========================
+const symbols = ["🐟","🐠","🐢","🦈","🐋","🪙","⭐","💎"];
+
+// =========================
+// 🎯 랜덤
+// =========================
+function randomSymbol() {
+    return symbols[Math.floor(Math.random() * symbols.length)];
+}
+
+// =========================
+// 🎰 초기 슬롯 세팅
+// =========================
+function initSlot() {
+    document.querySelectorAll(".cell").forEach(cell => {
+        cell.textContent = randomSymbol();
+    });
+}
+
+// ⭐ DOM 로딩 후 실행 (중요 안정화)
+window.addEventListener("DOMContentLoaded", () => {
+    initSlot();
 });
 
-fireBtn.addEventListener("touchend", () => {
+// =========================
+// 🎯 변수들
+// =========================
+let slotRunning = false;
+let colIntervals = {};
+let finalGrid = [];
+let finalResult = "NOTHING";
+
+let stopCount = 0;
+
+// =========================
+// 🎯 확률
+// =========================
+function getSlotResult() {
+    const r = Math.random() * 100;
+
+    if (r < SLOT_CONFIG.jackpot) return "JACKPOT";
+    if (r < SLOT_CONFIG.jackpot + SLOT_CONFIG.bigWin) return "BIGWIN";
+    if (r < SLOT_CONFIG.jackpot + SLOT_CONFIG.bigWin + SLOT_CONFIG.smallWin) return "SMALLWIN";
+
+    return "NOTHING";
+}
+
+// =========================
+// 🎯 결과 생성
+// =========================
+function generateFinalGrid(result) {
+
+    const grid = [];
+
+    for (let r = 0; r < 3; r++) {
+        grid[r] = [];
+        for (let c = 0; c < 4; c++) {
+            grid[r][c] = randomSymbol();
+        }
+    }
+
+    if (result === "JACKPOT") {
+        for (let r = 0; r < 3; r++) {
+            for (let c = 0; c < 4; c++) {
+                grid[r][c] = "🐋";
+            }
+        }
+    }
+
+    else if (result === "BIGWIN") {
+        const row = Math.floor(Math.random() * 3);
+        const sym = randomSymbol();
+
+        for (let c = 0; c < 4; c++) {
+            grid[row][c] = sym;
+        }
+    }
+
+    else if (result === "SMALLWIN") {
+        const col = Math.floor(Math.random() * 4);
+        const sym = randomSymbol();
+
+        for (let r = 0; r < 3; r++) {
+            grid[r][col] = sym;
+        }
+    }
+
+    return grid;
+}
+
+// =========================
+// 🎰 스핀
+// =========================
+function startColSpin(colId) {
+
+    const col = document.querySelectorAll(`#${colId} .cell`);
+
+    colIntervals[colId] = setInterval(() => {
+
+        const frame = [
+            randomSymbol(),
+            randomSymbol(),
+            randomSymbol()
+        ];
+
+        col.forEach((cell, r) => {
+            cell.textContent = frame[r];
+        });
+
+    }, 60);
+}
+
+// =========================
+// ⛔ 정지
+// =========================
+function stopCol(colId) {
+
+    clearInterval(colIntervals[colId]);
+
+    const colIndex = Number(colId.replace("col", "")) - 1;
+    const col = document.querySelectorAll(`#${colId} .cell`);
+
+    let count = 0;
+
+    const t = setInterval(() => {
+
+        const frame = [
+            randomSymbol(),
+            randomSymbol(),
+            randomSymbol()
+        ];
+
+        col.forEach((cell, r) => {
+            cell.textContent = frame[r];
+        });
+
+        count++;
+
+        if (count > 6) {
+            clearInterval(t);
+
+            col.forEach((cell, r) => {
+                cell.textContent = finalGrid[r][colIndex];
+            });
+
+            onColumnStopped();
+        }
+
+    }, 80);
+}
+
+// =========================
+// 🎯 릴 종료 감지
+// =========================
+function onColumnStopped() {
+
+    stopCount++;
+
+    if (stopCount >= 4) {
+
+        stopCount = 0;
+
+        setTimeout(() => {
+
+            const win = checkWin(finalGrid);
+
+            if (finalResult === "JACKPOT") {
+                showBonusEvent("🐋 JACKPOT!", "34px");
+            }
+            else if (finalResult === "BIGWIN") {
+                showBonusEvent("💰 BIG WIN!", "26px");
+            }
+            else if (finalResult === "SMALLWIN") {
+                showBonusEvent("🔥 SMALL WIN!", "22px");
+            }
+
+            slotRunning = false;
+            gameMode = "PLAY";
+            shootTimer = 0;
+
+        }, 500);
+    }
+}
+
+// =========================
+// 🎯 WIN CHECK
+// =========================
+function checkWin(grid) {
+
+    let winType = "NOTHING";
+    let winShown = false;
+
+    let allWhale = true;
+
+    for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 4; c++) {
+            if (grid[r][c] !== "🐋") {
+                allWhale = false;
+            }
+        }
+    }
+
+    if (allWhale) {
+        showBonusEvent("🐋 WHALE JACKPOT!", "34px");
+        return "JACKPOT";
+    }
+
+    for (let r = 0; r < 3; r++) {
+        if (
+            grid[r][0] === grid[r][1] &&
+            grid[r][1] === grid[r][2] &&
+            grid[r][2] === grid[r][3]
+        ) {
+            if (!winShown) {
+                showBonusEvent("💰 BIG WIN!", "26px");
+                winShown = true;
+            }
+            return "ROW";
+        }
+    }
+
+    for (let c = 0; c < 4; c++) {
+        if (
+            grid[0][c] === grid[1][c] &&
+            grid[1][c] === grid[2][c]
+        ) {
+            if (!winShown) {
+                showBonusEvent("🔥 COLUMN WIN!", "24px");
+                winShown = true;
+            }
+            return "COLUMN";
+        }
+    }
+
+    return "NOTHING";
+}
+
+// =========================
+// 🎰 실행
+// =========================
+
+function spinSlot() {
+
+    if (slotRunning) return;
+    slotRunning = true;
+
+    gameMode = "SLOT";
+
     shooting = false;
-});
+    shootTimer = 0;
+
+    // ⭐ 핵심: 무조건 가장 먼저
+    function playSlotSound() {
+    const s = new Audio("./sounds/slot_spin.mp3");
+    s.volume = 0.6;
+    s.play();
+}
+
+    finalResult = getSlotResult();
+    finalGrid = generateFinalGrid(finalResult);
+
+    stopCount = 0;
+
+    startColSpin("col1");
+    startColSpin("col2");
+    startColSpin("col3");
+    startColSpin("col4");
+
+    setTimeout(() => stopCol("col1"), 1200);
+    setTimeout(() => stopCol("col2"), 2000);
+    setTimeout(() => stopCol("col4"), 3000);
+    setTimeout(() => stopCol("col3"), 3800);
+}
+
+spinBtn.addEventListener("click", spinSlot);
+
+
+////////////////////////////////////////////////////////////
+///////////////////////슬롯 코드////////////////////////////
+///////////////////////////////////////////////////////////
+
+const fireBtn = document.getElementById("fireBtn");
 
 //scene.add(new THREE.AxesHelper(10));     //    화면에 중심을 알려주는 좌표
 
@@ -637,13 +962,44 @@ function spawnHitEffect(pos) {
     effects.push(group);
 }
 
+function spawnDeathEffect(pos) {   /////////////////////////////////  핏방울 퍼지는 코드
+
+    const group = new THREE.Group();
+    const geo = new THREE.SphereGeometry(0.15, 6, 6);
+
+    const COUNT = 25;
+
+    for (let i = 0; i < COUNT; i++) {
+
+        const mat = new THREE.MeshBasicMaterial({
+            color: 0x8b0000,
+            transparent: true,
+            opacity: 1
+        });
+
+        const p = new THREE.Mesh(geo, mat);
+        p.position.copy(pos);
+
+        p.userData.velocity = new THREE.Vector3(
+            (Math.random() - 0.5) * 0.15,
+            Math.random() * 0.15,
+            (Math.random() - 0.5) * 0.15
+        );
+
+        group.add(p);
+    }
+
+    scene.add(group);
+    effects.push(group);
+}
+
 /* =========================
    SPAWN FISH
 ========================= */
 
 function spawnFish() {
 
-    //if (fishes.length >= MAX_FISH) return;
+    //  if (fishes.length >= MAX_FISH) return;                         주석을 풀면 고기는 10마리로 한정됨.
 
     const normalFishCount = fishes.reduce((count, f) => {
     return count + (f.userData?.type === "normal" ? 1 : 0);
@@ -667,7 +1023,7 @@ function spawnFish() {
     fish.scale.set(modelInfo.scale, modelInfo.scale, modelInfo.scale);
 
     const randomX = (Math.random() - 0.5) * BOUNDS.x;
-    const randomY = -3 + Math.random() * BOUNDS.y;  //*************  물고기가 떠있는 공간
+    const randomY = -2 + Math.random() * 1;  //*************  물고기가 떠있는 공간
     const randomZ = (Math.random() - 0.5) * BOUNDS.z;
 
     const side = Math.floor(Math.random() * 6);
@@ -714,7 +1070,11 @@ switch (side) {
     score: modelInfo.score,
 
     swimOffset: Math.random() * Math.PI * 2,
-    swimPower: 0.08 + Math.random() * 0.03
+    swimPower: 0.08 + Math.random() * 0.03,
+
+    targetTimer: 0,
+    stuckTimer: 0,
+    lastMovePos: fish.position.clone()
 };
 
     fish.userData.target.set(
@@ -761,7 +1121,7 @@ function startTurtleEvent() {
     setTimeout(() => {
         sounds.turtle_theme.pause();
         currentEvent = null;
-    }, 12000);
+    }, 30000);
 }
 
 /* =========================
@@ -790,7 +1150,7 @@ function startSharkEvent() {
     // ⛔ 이벤트 종료
     setTimeout(() => {
         currentEvent = null;
-    }, 15000);
+    }, 30000);
 }
 
 /* =========================
@@ -808,7 +1168,7 @@ function startWhaleEvent() {
 
     const count = 1
 
-    spawnSpecialFish(WHALE);
+    if (currentEvent) return;
 
     addScore(whale.spawnBonus);
 
@@ -816,7 +1176,7 @@ function startWhaleEvent() {
 
     setTimeout(() => {
         endWhaleEvent();
-    }, 20000);
+    }, 30000);
 }
 
 function endWhaleEvent() {
@@ -972,17 +1332,16 @@ raycaster.ray.intersectPlane(
 
 window.addEventListener("touchstart", (e) => {
 
-    unlockAudio();
-    startBGM();
+    if (e.target.closest("#spinBtn")) return;
+
+    if (gameMode !== "PLAY") return;
 
     shooting = true;
 
 }, { passive: true });
 
 window.addEventListener("touchend", () => {
-
     shooting = false;
-
 }, { passive: true });
 
 window.addEventListener("touchmove", (e) => {
@@ -1023,14 +1382,27 @@ let shooting = false;
 let shootTimer = 0;
 const fireRate = 0.12;
 
-window.addEventListener("mousedown", () => shooting = true);
-window.addEventListener("mouseup", () => shooting = false);
+window.addEventListener("mousedown", (e) => {
+
+    // ⭐ UI 버튼 클릭이면 무시
+    if (e.target.closest("#spinBtn")) return;
+
+    if (gameMode !== "PLAY") return;
+
+    shooting = true;
+});
+
+window.addEventListener("mouseup", () => {
+    shooting = false;
+});
 
 
 
 let lastShootSound = 0;
 
 function shoot() {
+
+    if (gameMode !== "PLAY") return;
 
     const now = performance.now();
 
@@ -1133,6 +1505,7 @@ function spawnMuzzleBubbles(pos) {
 
 function showBonusEvent(text, size = "24px") {//...............................  이벤트 문구 기본텍스트 크기
 
+    const fireBtn = document.getElementById("fireBtn");
     const box = document.getElementById("bonusEvent");
     const name = document.getElementById("bonusName");
 
@@ -1206,7 +1579,7 @@ function animate() {
 ========================= */
 
     spawnTimer += delta;
-    if (spawnTimer > 1.2) {
+    if (spawnTimer > 2.0) {
         spawnTimer = 0;
         spawnFish();
     }
@@ -1219,7 +1592,7 @@ function animate() {
 ========================= */
 
     shootTimer += delta;
-    if (shooting && shootTimer > fireRate) {
+    if (gameMode === "PLAY" && shooting && shootTimer > fireRate) {
         shootTimer = 0;
         for (let i = 0; i < 4; i++) {      //.......................................총알 증가하는 코드
          setTimeout(() => shoot(), i * 50);
@@ -1255,8 +1628,47 @@ function animate() {
     const target = fish.userData.target;
 
     // ⭐ 목표 갱신
-    if (fish.position.distanceTo(target) < 1.5) {
-        setNewTarget(fish);
+    // ⭐ 타겟 타이머 증가
+    fish.userData.targetTimer += delta;
+
+    // 도착 OR 5초 경과 OR 벽 근처
+    if (
+    fish.position.distanceTo(target) < 1.5 ||
+    fish.userData.targetTimer > 5
+    ) {
+    setNewTarget(fish);
+    fish.userData.targetTimer = 0;
+    }
+    const edgeLimit = 40;
+
+    if (
+    Math.abs(fish.position.x) > edgeLimit ||
+    Math.abs(fish.position.z) > edgeLimit
+    ) {
+    setNewTarget(fish);
+    }
+    // ⭐ stuck 감지
+    const moved = fish.position.distanceTo(fish.userData.lastMovePos);
+
+    if (moved < 0.01) {
+    fish.userData.stuckTimer += delta;
+    } else {
+    fish.userData.stuckTimer = 0;
+    }
+
+    fish.userData.lastMovePos.copy(fish.position);
+
+   // 3초 이상 안 움직이면 강제 리셋
+    if (fish.userData.stuckTimer > 3) {
+    setNewTarget(fish);
+    fish.userData.stuckTimer = 0;
+
+    // 방향도 리셋
+    fish.userData.smoothDir.set(
+        Math.random() - 0.5,
+        0,
+        Math.random() - 0.5
+    ).normalize();
     }
 
     // =========================
@@ -1358,7 +1770,7 @@ function animate() {
 
                 if (now - lastHitEffectTime > HIT_EFFECT_COOLDOWN) {
 
-                    spawnHitEffect(fish.position.clone());
+                    spawnDeathEffect(fish.position.clone());
                     lastHitEffectTime = now;
                 }
 
@@ -1397,7 +1809,7 @@ console.log("🐟 spawn check:", {
 
                 if (now - lastHitEffectTime > HIT_EFFECT_COOLDOWN) {
 
-                    spawnHitEffect(fish.position.clone());
+                    spawnDeathEffect(fish.position.clone());
                     lastHitEffectTime = now;
                 }
 
