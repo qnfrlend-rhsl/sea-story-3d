@@ -54,13 +54,17 @@ const sounds = {
 
 
        // 🎰 jackpot 사운드
+    turtle_bonus: new Audio("./sounds/turtle_bonus.mp3"),
+    shark_bonus: new Audio("./sounds/shark_bonus.mp3"),
+    whale_bonus: new Audio("./sounds/whale_bonus.mp3"),   
     small_win: new Audio("./sounds/small_win.mp3"),
     big_win: new Audio("./sounds/big_win.mp3"),
     jackpot_win: new Audio("./sounds/jackpot_win.mp3"),
 };
-function playSfx(audio, volume = 0.5) {
-    const s = audio.cloneNode();
-    s.volume = volume * sfxVolume;
+function playSfx(audio, volume = 0.8) {
+    const s = new Audio(audio.src);
+    s.volume = Math.min(1, volume * sfxVolume);
+    s.currentTime = 0;
     s.play().catch(() => {});
 }
 
@@ -377,19 +381,19 @@ function onColumnStopped() {
 
     if (finalResult === "JACKPOT") {
 
-        playSfx(sounds.jackpot_win, 1.0);
+        playSfx(sounds.jackpot_win, 2.0);
         showBonusEvent("🐋 JACKPOT!", "34px");
 
     }
     else if (finalResult === "BIGWIN") {
 
-        playSfx(sounds.big_win, 0.8);
+        playSfx(sounds.big_win, 2.0);
         showBonusEvent("💰 BIG WIN!", "26px");
 
     }
     else if (finalResult === "SMALLWIN") {
 
-        playSfx(sounds.small_win, 0.7);
+        playSfx(sounds.small_win, 2.0);
         showBonusEvent("🔥 SMALL WIN!", "22px");
     }
 
@@ -437,19 +441,6 @@ function checkWin(grid) {
                 winShown = true;
             }
             return "ROW";
-        }
-    }
-
-    for (let c = 0; c < 4; c++) {
-        if (
-            grid[0][c] === grid[1][c] &&
-            grid[1][c] === grid[2][c]
-        ) {
-            if (!winShown) {
-                showBonusEvent("🔥 COLUMN WIN!", "24px");
-                winShown = true;
-            }
-            return "COLUMN";
         }
     }
 
