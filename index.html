@@ -15,52 +15,69 @@
         }
     }
     </script>
-
 </head>
+
 <body>
 
-    <div id="cabinet">
+<div id="cabinet">
 
-        <div id="oceanArea"></div>
+    <!-- 🌊 3D 영역 -->
+    <div id="oceanArea"></div>
 
-        <div id="slotArea">
-    <div id="slotPanel">
+    <!-- 🎰 SLOT 영역 -->
+    <div id="slotArea">
+        <div id="slotPanel">
 
-        <div class="slot-header">✨ SEA STORY JACKPOT ✨</div>
+            <div class="slot-header">✨ SEA STORY JACKPOT ✨</div>
 
-        <div class="slot-grid">
+            <div class="slot-grid">
 
-            <div class="col" id="col1">
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
+                <div class="col" id="col1">
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                </div>
+
+                <div class="col" id="col2">
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                </div>
+
+                <div class="col" id="col3">
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                </div>
+
+                <div class="col" id="col4">
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                    <div class="cell"></div>
+                </div>
+
             </div>
 
-            <div class="col" id="col2">
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-            </div>
+            <!-- 🎯 SPIN CONTROL BAR (핵심 UI) -->
+            <div id="spinBar">
 
-            <div class="col" id="col3">
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-            </div>
+                <!-- 💰 LEFT: SCORE -->
+                <div id="scoreUI" class="spin-info">
+                    SCORE: 0
+                </div>
 
-            <div class="col" id="col4">
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
+                <!-- 🎰 CENTER: BUTTON -->
+                <button id="spinBtn">SPIN</button>
+
+                <!-- 🎟 RIGHT: SPIN COUNT -->
+                <div id="spinUI" class="spin-info">
+                    SPIN: 0
+                </div>
+
             </div>
 
         </div>
-
-        <button id="spinBtn">SPIN</button>
-
     </div>
-</div>
-
 
     <!-- ✨ BONUS EVENT -->
     <div id="bonusEvent">
@@ -68,7 +85,9 @@
         <div id="bonusName"></div>
     </div>
 
-    <script type="module" src="main.js"></script>
+</div>
+
+<script type="module" src="main.js"></script>
 
 </body>
 </html>

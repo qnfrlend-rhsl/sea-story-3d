@@ -9,6 +9,7 @@ let loadedFishCount = 0;
 let scoreMultiplier = 1;
 let fishSpawnRate = 0.7;
 let score = 0;
+let spinCount = 0;
 let spawnTimer = 0;
 let currentEvent = null;
 let eventTimer = 0;
@@ -30,7 +31,8 @@ const MAX_FISH = 10;                      //////////////////////////////////////
 const FLOOR_Y = -3;
 function addScore(value) {
     score += value;
-    console.log("💰 SCORE:", score);
+    updateSpinCount();   // ⭐ 스핀 자동 갱신
+    updateUI();          // ⭐ 화면 갱신
 }
 function clampPosition(pos) {
     pos.x = THREE.MathUtils.clamp(pos.x, -BOUNDS.x / 2, BOUNDS.x / 2);
@@ -136,6 +138,14 @@ function startBGM() {
             });
     }
 }
+function updateSpinCount() {
+    spinCount = Math.floor(score / 100);
+}
+
+function updateUI() {
+    document.getElementById("scoreUI").textContent = `SCORE: ${score}`;
+    document.getElementById("spinUI").textContent = `SPIN: ${spinCount}`;
+}
 
 /* =========================
    🖱️ FIRST CLICK INIT
@@ -153,6 +163,12 @@ window.addEventListener("click", () => {
     startBGM();
 
 }, { once: true });
+
+/* =========================
+   🎮 INIT UI (🔥 여기!)
+========================= */
+updateSpinCount();
+updateUI();
 
 
 const seaBubbles = [];
@@ -379,42 +395,40 @@ function onColumnStopped() {
 
     const win = checkWin(finalGrid);
 
-    if (finalResult === "JACKPOT") {
+if (win === "JACKPOT") {
 
-        playSfx(sounds.jackpot_win, 2.0);
-        showBonusEvent("🐋 JACKPOT!", "34px");
+    addScore(10000);
+    playSfx(sounds.jackpot_win, 2.0);
+    showBonusEvent("🐋 JACKPOT!", "34px");
+}
 
-    }
-    else if (finalResult === "BIGWIN") {
+else if (win === "BIGWIN") {
 
-        playSfx(sounds.big_win, 2.0);
-        showBonusEvent("💰 BIG WIN!", "26px");
+    addScore(500);
+    playSfx(sounds.big_win, 2.0);
+    showBonusEvent("💰 BIG WIN!", "26px");
+}
 
-    }
-    else if (finalResult === "SMALLWIN") {
+else if (win === "SMALLWIN") {
 
-        playSfx(sounds.small_win, 2.0);
-        showBonusEvent("🔥 SMALL WIN!", "22px");
-    }
+    addScore(100);
+    playSfx(sounds.small_win, 2.0);
+    showBonusEvent("🔥 SMALL WIN!", "22px");
+}
 
-    // ⭐ 이거 반드시 있어야 함
     slotRunning = false;
     gameMode = "PLAY";
-    shootTimer = 0;
-    startBGM();
 
 }, 500);
-  }
-}
+    }
+    }
 
 // =========================
 // 🎯 WIN CHECK
 // =========================
 function checkWin(grid) {
 
-    let winType = "NOTHING";
-    let winShown = false;
-
+    // 🐋 JACKPOT
     let allWhale = true;
 
     for (let r = 0; r < 3; r++) {
@@ -425,22 +439,26 @@ function checkWin(grid) {
         }
     }
 
-    if (allWhale) {
-        showBonusEvent("🐋 WHALE JACKPOT!", "34px");
-        return "JACKPOT";
-    }
+    if (allWhale) return "JACKPOT";
 
+    // 🔥 BIGWIN (가로)
     for (let r = 0; r < 3; r++) {
         if (
             grid[r][0] === grid[r][1] &&
             grid[r][1] === grid[r][2] &&
             grid[r][2] === grid[r][3]
         ) {
-            if (!winShown) {
-                showBonusEvent("💰 BIG WIN!", "26px");
-                winShown = true;
-            }
-            return "ROW";
+            return "BIGWIN";
+        }
+    }
+
+    // 🔥 SMALLWIN (세로) ← 추가된 핵심
+    for (let c = 0; c < 4; c++) {
+        if (
+            grid[0][c] === grid[1][c] &&
+            grid[1][c] === grid[2][c]
+        ) {
+            return "SMALLWIN";
         }
     }
 
@@ -456,23 +474,26 @@ function checkWin(grid) {
 function spinSlot() {
 
     if (slotRunning) return;
+    if (spinCount <= 0) return;
+
+    spinCount--;
+    score -= 100;
+    updateUI();
 
     currentSlotSound = sounds.slot_spin.cloneNode();
-
     currentSlotSound.volume = 0.6 * sfxVolume;
-
-    currentSlotSound.currentTime = 0;
-
     currentSlotSound.play().catch(()=>{});
 
     slotRunning = true;
-
     gameMode = "SLOT";
 
     shooting = false;
     shootTimer = 0;
 
+    // ⭐ 핵심 수정 1: 확률 결과 먼저 뽑기
     finalResult = getSlotResult();
+
+    // ⭐ 핵심 수정 2: 그 결과로 grid 생성
     finalGrid = generateFinalGrid(finalResult);
 
     stopCount = 0;
@@ -486,8 +507,6 @@ function spinSlot() {
     setTimeout(() => stopCol("col2"), 2000);
     setTimeout(() => stopCol("col4"), 3000);
     setTimeout(() => stopCol("col3"), 3800);
-
-    if (slotRunning) return;
 }
 
 spinBtn.addEventListener("click", spinSlot);
@@ -1113,15 +1132,12 @@ function startTurtleEvent() {
     currentEvent = "TURTLE";
 
     sounds.turtle_theme.currentTime = 0;
-    sounds.turtle_theme.volume = 0.5 * sfxVolume;
     sounds.turtle_theme.play().catch(() => {});
 
-    
-    for (let i = 0; i < 1; i++) {
-        spawnSpecialFish(TURTLE);
-    }
+    spawnSpecialFish(TURTLE);
 
-    addScore(turtle.spawnBonus); // 👈 이게 핵심 (1000 그대로 사용)
+    // ⭐ BONUS + SCORE 통합 처리
+    addScore(turtle.spawnBonus + turtle.score);
 
     showBonusEvent("🐢 TURTLE BONUS!", "20px");
 
@@ -1130,7 +1146,6 @@ function startTurtleEvent() {
         currentEvent = null;
     }, 30000);
 }
-
 /* =========================
    🦈 SHARK EVENT (보스 1)
 ========================= */
@@ -1151,6 +1166,7 @@ function startSharkEvent() {
         spawnSpecialFish(SHARK);
     }
 
+    addScore(shark.spawnBonus + shark.score);
     // 🦈 문구
     showBonusEvent("🦈 SHARK HUNT!", "20px");
 
@@ -1177,7 +1193,7 @@ function startWhaleEvent() {
 
     spawnSpecialFish(WHALE);
 
-    addScore(whale.spawnBonus);
+    addScore(whale.spawnBonus + whale.score);
 
     showBonusEvent("🐋 WHALE APPEARS!", "20px");
 
@@ -1753,30 +1769,28 @@ function animate() {
     const fish = fishes[j];
 
     const hitRadius =
-        fish.userData.type === "shark" ? 2.5 : 1.2;        //   물고기 타격수치로 맞으면 죽는 수치(낮으면 잘 안죽음)
+        fish.userData.type === "shark" ? 2.5 : 1.2;
 
     const hitRadiusSq = hitRadius * hitRadius;
 
-    // ✔ 재사용 Vector
     const hitPoint = tempVec1;
     fish.getWorldPosition(hitPoint);
 
-    // ✔ 충돌 (sqrt 제거)
-    if (b.position.distanceToSquared(hitPoint) < hitRadiusSq) {        
+    // 충돌 체크
+    if (b.position.distanceToSquared(hitPoint) < hitRadiusSq) {
 
         // 🦈 SHARK
         if (fish.userData.type === "shark") {
 
             fish.userData.hp -= 10;
-            fish.scale.multiplyScalar(0.999);
+
+            // ❌ 삭제됨: fish.scale.multiplyScalar(0.999);
 
             if (fish.userData.hp <= 0) {
 
-                // 🔥 이펙트 제한 (쿨타임)
                 const now = performance.now() * 0.001;
 
                 if (now - lastHitEffectTime > HIT_EFFECT_COOLDOWN) {
-
                     spawnDeathEffect(fish.position.clone());
                     lastHitEffectTime = now;
                 }
@@ -1785,21 +1799,16 @@ function animate() {
 
                 scene.remove(fish);
 
-// fishes 제거
-const idx = fishes.indexOf(fish);
-if (idx !== -1) {
-    fishes.splice(idx, 1);
-}
+                const idx = fishes.indexOf(fish);
+                if (idx !== -1) fishes.splice(idx, 1);
 
-// mixers는 안전하게 따로 찾기
-const mIdx = mixers.findIndex(m => m._root === fish);
-if (mIdx !== -1) {
-    mixers.splice(mIdx, 1);
-}
-console.log("🐟 spawn check:", {
-    total: fishes.length,
-    normal: fishes.filter(f => f.userData?.type === "normal").length
-});
+                const mIdx = mixers.findIndex(m => m._root === fish);
+                if (mIdx !== -1) mixers.splice(mIdx, 1);
+
+                console.log("🐟 spawn check:", {
+                    total: fishes.length,
+                    normal: fishes.filter(f => f.userData?.type === "normal").length
+                });
             }
         }
 
@@ -1807,15 +1816,14 @@ console.log("🐟 spawn check:", {
         else {
 
             fish.userData.hp -= 1;
-            fish.scale.multiplyScalar(0.999);
+
+            // ❌ 삭제됨: fish.scale.multiplyScalar(0.999);
 
             if (fish.userData.hp <= 0) {
 
-                // 🔥 이펙트 제한 (쿨타임)
                 const now = performance.now() * 0.001;
 
                 if (now - lastHitEffectTime > HIT_EFFECT_COOLDOWN) {
-
                     spawnDeathEffect(fish.position.clone());
                     lastHitEffectTime = now;
                 }
