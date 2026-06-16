@@ -260,7 +260,7 @@ body{
 
 #spinBtn {
     position: absolute;
-    bottom: 20px;   /* 🔥 맨 아래 고정 */
+    bottom: 17px;   /* 🔥 맨 아래 고정 */
     left: 50%;
     transform: translateX(-50%);
 
@@ -316,11 +316,11 @@ body{
 /* SCORE */
 #scoreUI{
     position:absolute;
-    bottom:15px;
-    left:62%;
+    bottom:12px;
+    left:68.4%;
     transform:translateX(-220px);
 
-    width:120px;
+    width:100px;
     height:42px;
 
     display:flex;
@@ -352,11 +352,11 @@ body{
 /* SPIN COUNT */
 #spinUI{
     position:absolute;
-    bottom:15px;
-    left:41%;
+    bottom:12px;
+    left:40%;
     transform:translateX(90px);
 
-    width:120px;
+    width:100px;
     height:42px;
 
     display:flex;
