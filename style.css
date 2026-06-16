@@ -210,7 +210,7 @@ body{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 6px;
+    gap: 6px; /* 세로줄 간격 조절하는 코드 */
     margin-top: 40px;
 }
 
@@ -239,7 +239,8 @@ body{
 
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding-top: 0px;
 }
 
 .cell.spinning {
