@@ -19,6 +19,7 @@ body{
 
 /* 게임기 전체 */
 #cabinet{
+
     position:relative;
 
     aspect-ratio: 720 / 1280;
@@ -30,14 +31,15 @@ body{
     border:8px solid #00d4ff;
     border-radius:22px;
 
-    background: linear-gradient(
+    background:
+    linear-gradient(
         to bottom,
         #0a3a4a,
         #06202a,
         #04141a
     );
 
-    overflow:visible; /* ⭐ 핵심 수정 */
+    overflow:hidden;
 
     box-shadow:
         0 0 25px rgba(0, 255, 255, 0.6),
@@ -484,29 +486,37 @@ body{
 #cabinet::before{
     content:"";
     position:absolute;
-    inset:-6px;
-
-    border-radius:28px;
+    inset:-20px;
+    border-radius:30px;
 
     border:3px solid transparent;
 
-    border-top:3px solid #00ffff;
-    border-right:3px solid #00aaff;
+    background:
+        conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            #00ffff 40deg,
+            transparent 80deg,
+            #00aaff 120deg,
+            transparent 160deg,
+            #00ffff 200deg,
+            transparent 360deg
+        );
 
-    box-shadow:
-        0 0 15px #00ffff,
-        0 0 40px #00aaff;
+    -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    padding:3px;
 
     animation:ringRotate 3s linear infinite;
 
     pointer-events:none;
-}
-
-@keyframes ringRotate{
-    0%{
-        transform:rotate(0deg);
-    }
-    100%{
-        transform:rotate(360deg);
-    }
 }
