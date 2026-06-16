@@ -5,8 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sea Story 3D</title>
 
+    <!-- 🌊 CSS -->
     <link rel="stylesheet" href="style.css">
 
+    <!-- 📱 PWA MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- 🍎 iOS 아이콘 -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!-- 🎨 테마 컬러 -->
+    <meta name="theme-color" content="#000000">
+
+    <!-- 📱 모바일 앱 모드 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- 🚀 THREE IMPORT MAP -->
     <script type="importmap">
     {
         "imports": {
@@ -58,18 +74,15 @@
 
             </div>
 
-            <!-- 🎯 SPIN CONTROL BAR (핵심 UI) -->
+            <!-- 🎯 SPIN CONTROL BAR -->
             <div id="spinBar">
 
-                <!-- 💰 LEFT: SCORE -->
                 <div id="scoreUI" class="spin-info">
                     SCORE: 0
                 </div>
 
-                <!-- 🎰 CENTER: BUTTON -->
                 <button id="spinBtn">SPIN</button>
 
-                <!-- 🎟 RIGHT: SPIN COUNT -->
                 <div id="spinUI" class="spin-info">
                     SPIN: 0
                 </div>
