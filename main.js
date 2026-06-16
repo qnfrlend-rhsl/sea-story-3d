@@ -27,7 +27,7 @@ const MAX_BULLETS = 50;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 35;                      //////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 55;                      //////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 function addScore(value) {
     score += value;
