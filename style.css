@@ -19,11 +19,10 @@ body{
 
 /* 게임기 전체 */
 #cabinet{
-
     position:relative;
 
-    aspect-ratio: 720 / 1280;
-    height:95vh;
+    width: min(95vw, 420px);
+    height: min(100dvh, 900px);
 
     display:flex;
     flex-direction:column;
@@ -31,20 +30,21 @@ body{
     border:8px solid #00d4ff;
     border-radius:22px;
 
-    background:
-    linear-gradient(
+    background: linear-gradient(
         to bottom,
         #0a3a4a,
         #06202a,
         #04141a
     );
 
-    overflow:visible;
+    overflow:visible; /* ⭐ 핵심 */
 
     box-shadow:
         0 0 25px rgba(0, 255, 255, 0.6),
         0 0 60px rgba(0, 180, 255, 0.25),
         inset 0 0 25px rgba(255,255,255,0.08);
+
+    margin:auto; /* ⭐ 완전 중앙 고정 */
 }
 
 /* 위 4 */
@@ -486,7 +486,7 @@ body{
 #cabinet::before{
     content:"";
     position:absolute;
-    inset:-6px;
+    inset:-4px;
     border-radius:28px;
 
     border:3px solid transparent;
