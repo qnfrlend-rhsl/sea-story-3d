@@ -120,11 +120,23 @@ body{
 }
 
 #bonusTitle{
-    font-size:33px;
-    font-weight:900;
-    color:gold;
+    width: 100%;
+    text-align: center;
 
-    animation:bonusFlash 1.2s infinite;
+    font-size: clamp(40px, 6vw, 90px);  /*화면에 보너스라고 나오는 문구 조절 코드*/
+    font-weight: 900;
+    color: gold;
+
+    white-space: nowrap;
+    line-height: 1;
+
+    display: flex;            
+    justify-content: center;   
+    align-items: center;        
+
+    letter-spacing: 2px;       
+
+    animation: bonusFlash 1.2s infinite;
 /*
     text-shadow:
         0 0 5px #fff,

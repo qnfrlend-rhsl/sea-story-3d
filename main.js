@@ -413,7 +413,7 @@ else if (win === "SMALLWIN") {
 
     addScore(100);
     playSfx(sounds.small_win, 2.0);
-    showBonusEvent("🔥 SMALL WIN!", "22px");
+    showBonusEvent("🔥 SMALL WIN!", "20px");
 }
 
     slotRunning = false;
