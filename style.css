@@ -125,14 +125,14 @@ body{
     color:gold;
 
     animation:bonusFlash 1.2s infinite;
-
+/*
     text-shadow:
         0 0 5px #fff,
         0 0 15px gold,
         0 0 30px gold,
         0 0 60px orange;
 
-    transform: scale(1);
+    transform: scale(1);  */
 }
 
 #bonusName{
