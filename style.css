@@ -252,7 +252,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 10px;  /* 현재 슬롯에서 돌아가는 이미지를 위/아래로 움직이는 수치 */
+    padding-top: 8px;  /* 현재 슬롯에서 돌아가는 이미지를 위/아래로 움직이는 수치 */
 }
 
 .cell.spinning {
