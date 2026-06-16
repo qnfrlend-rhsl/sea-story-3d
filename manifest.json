@@ -1,6 +1,6 @@
 {
   "name": "Sea Story 3D",
-  "short_name": "SeaStory",
+  "short_name": "SeaStory3D",
   "start_url": "./index.html",
   "display": "fullscreen",
   "background_color": "#000000",
