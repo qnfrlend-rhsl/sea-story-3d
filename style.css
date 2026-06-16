@@ -260,7 +260,7 @@ body{
 
 #spinBtn {
     position: absolute;
-    bottom: 22px;   /* 🔥 맨 아래 고정 */
+    bottom: 20px;   /* 🔥 맨 아래 고정 */
     left: 50%;
     transform: translateX(-50%);
 
@@ -316,7 +316,7 @@ body{
 /* SCORE */
 #scoreUI{
     position:absolute;
-    bottom:18px;
+    bottom:15px;
     left:62%;
     transform:translateX(-220px);
 
@@ -348,10 +348,11 @@ body{
         inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
+
 /* SPIN COUNT */
 #spinUI{
     position:absolute;
-    bottom:18px;
+    bottom:15px;
     left:41%;
     transform:translateX(90px);
 
@@ -386,7 +387,7 @@ body{
 /* ⭐ 여기부터 추가 */
 .sideDecor{
     position:absolute;
-    top:54%;              /* ⭐ 핵심 */
+    top:54%;
     transform:translateY(-50%);
     font-size:40px;
     z-index:5;
