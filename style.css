@@ -39,7 +39,7 @@ body{
 
     overflow:visible; /* ⭐ 핵심 */
 
-    box-shadow:
+    /*box-shadow:
         0 0 25px rgba(0, 255, 255, 0.6),
         0 0 60px rgba(0, 180, 255, 0.25),
         inset 0 0 25px rgba(255,255,255,0.08);
@@ -240,7 +240,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 0px;
+    padding-top: 0px;  /* 현재 슬롯에서 돌아가는 이미지를 위/아래로 움직이는 수치 */
 }
 
 .cell.spinning {
@@ -450,39 +450,3 @@ body{
 }
 
 
-#cabinet::before{
-    content:"";
-    position:absolute;
-    inset:0;
-
-    border-radius:22px;
-
-    border:3px solid transparent;
-
-    background: conic-gradient(
-        from 0deg,
-        transparent 0deg,
-        #00ffff 40deg,
-        transparent 80deg,
-        #00aaff 120deg,
-        transparent 160deg,
-        #00ffff 200deg,
-        transparent 360deg
-    );
-
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-
-    padding:3px;
-
-    animation:ringRotate 3s linear infinite;
-
-    pointer-events:none;
-}
