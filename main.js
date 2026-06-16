@@ -1065,9 +1065,8 @@ function spawnFish() {
 
     const fish = SkeletonUtils.clone(gltf.scene);
 
-    fish.userData.mixer = new THREE.AnimationMixer(fish);
-
-    const mixer = fish.userData.mixer;
+    const mixer = new THREE.AnimationMixer(fish);
+    fish.userData.mixer = mixer;
 
     gltf.animations?.forEach(a => {
     const action = mixer.clipAction(a);
@@ -1252,11 +1251,16 @@ function returnFishToPool(fish) {
     scene.remove(fish);
 
     fish.userData.mixer?.stopAllAction();
+    fish.userData.mixer = null;
+
     fish.visible = false;
 
     const idx = fishes.indexOf(fish);
     if (idx !== -1) fishes.splice(idx, 1);
-    
+
+    // 👉 최소 초기화만 (과하게 지우지 않음)
+    fish.userData.hp = 0;
+
     if (fishPool.length < MAX_POOL) {
         fishPool.push(fish);
     }
