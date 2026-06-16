@@ -273,7 +273,7 @@ body{
 
 #spinBtn {
     position: absolute;
-    bottom: 17px;   /* 🔥 맨 아래 고정 */
+    bottom: 20px;   /* 🔥 맨 아래 고정 */
     left: 50%;
     transform: translateX(-50%);
 
@@ -329,11 +329,11 @@ body{
 /* SCORE */
 #scoreUI{
     position:absolute;
-    bottom:12px;  /* 박스 상하 이동 */
-    left:65.5%;  /* 박스 좌우 넓히기 */
+    bottom:15px;  /* 박스 상하 이동 */
+    left:67.2%;  /* 박스 좌우 넓히기 */
     transform:translateX(-220px);
 
-    width:110px;  /* 박스 좌우 넓히기 */
+    width:100px;  /* 박스 좌우 넓히기 */
     height:42px;
 
     display:flex;
@@ -365,11 +365,11 @@ body{
 /* SPIN COUNT */
 #spinUI{
     position:absolute;
-    bottom:12px;  /* 박스 상하 이동 */
-    left:40%;  /* 박스 좌우 넓히기 */
+    bottom:15px;  /* 박스 상하 이동 */
+    left:41%;  /* 박스 좌우 넓히기 */
     transform:translateX(90px);
 
-    width:110px;  /* 박스 좌우 넓히기 */
+    width:100px;  /* 박스 좌우 넓히기 */
     height:42px;
 
     display:flex;
