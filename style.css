@@ -329,11 +329,11 @@ body{
 /* SCORE */
 #scoreUI{
     position:absolute;
-    bottom:12px;
-    left:68.4%;
+    bottom:12px;  /* 박스 상하 이동 */
+    left:65.5%;  /* 박스 좌우 넓히기 */
     transform:translateX(-220px);
 
-    width:100px;
+    width:110px;  /* 박스 좌우 넓히기 */
     height:42px;
 
     display:flex;
@@ -350,7 +350,7 @@ body{
     border-radius:10px;
 
     color:white;
-    font-size:15px;
+    font-size:13px;    /* SPIN 글자 크기조절 */
     font-weight:700;
 
     text-shadow:
@@ -365,11 +365,11 @@ body{
 /* SPIN COUNT */
 #spinUI{
     position:absolute;
-    bottom:12px;
-    left:40%;
+    bottom:12px;  /* 박스 상하 이동 */
+    left:40%;  /* 박스 좌우 넓히기 */
     transform:translateX(90px);
 
-    width:100px;
+    width:110px;  /* 박스 좌우 넓히기 */
     height:42px;
 
     display:flex;
@@ -386,7 +386,7 @@ body{
     border-radius:10px;
 
     color:white;
-    font-size:15px;
+    font-size:13px;    /* SPIN 글자 크기조절 */
     font-weight:700;
 
     text-shadow:
