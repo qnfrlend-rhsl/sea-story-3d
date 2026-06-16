@@ -19,43 +19,25 @@ body{
 
 /* 게임기 전체 */
 #cabinet{
-    position:relative;
 
-    width: min(95vw, 420px);
-    height: min(100dvh, 900px);
+    aspect-ratio: 720 / 1280;
+
+    height:95vh;
 
     display:flex;
     flex-direction:column;
 
-    border:8px solid #00d4ff;
-    border-radius:22px;
-
-    background: linear-gradient(
-        to bottom,
-        #0a3a4a,
-        #06202a,
-        #04141a
-    );
-
-    overflow:visible; /* ⭐ 핵심 */
-
-    /*box-shadow:
-        0 0 25px rgba(0, 255, 255, 0.6),
-        0 0 60px rgba(0, 180, 255, 0.25),
-        inset 0 0 25px rgba(255,255,255,0.08);
-
-    margin:auto; /* ⭐ 완전 중앙 고정 */
+    border:4px solid #444;
+    background:#000;
 }
 
 /* 위 4 */
 #oceanArea{
-    flex:3.8;
-        position:relative;
-    overflow:hidden;
+    flex:4;
 
     background:linear-gradient(
         to bottom,
-        #00d4ff,
+        #0088cc,
         #003355
     );
 
@@ -65,13 +47,11 @@ body{
 
 /* 아래 3 */
 #slotArea{
-    flex:3.2;
-        position:relative;
-    z-index:2;
+    flex:3;
 
     background:#111;
 
-    border-top:3px solid #00d4ff;
+    border-top:3px solid #555;
 
     display:flex;
     justify-content:center;
@@ -80,7 +60,7 @@ body{
 
 #slotPanel{
     width:92%;
-    height:90%;
+    height:85%;
 
     border:3px solid gold;
     border-radius:15px;
@@ -120,31 +100,19 @@ body{
 }
 
 #bonusTitle{
-    width: 100%;
-    text-align: center;
+    font-size:42px;
+    font-weight:900;
+    color:gold;
 
-    font-size: clamp(40px, 6vw, 90px);  /*화면에 보너스라고 나오는 문구 조절 코드*/
-    font-weight: 900;
-    color: gold;
+    animation:bonusFlash 1.2s infinite;
 
-    white-space: nowrap;
-    line-height: 1;
-
-    display: flex;            
-    justify-content: center;   
-    align-items: center;        
-
-    letter-spacing: 2px;       
-
-    animation: bonusFlash 1.2s infinite;
-/*
     text-shadow:
         0 0 5px #fff,
         0 0 15px gold,
         0 0 30px gold,
         0 0 60px orange;
 
-    transform: scale(1);  */
+    transform: scale(1);
 }
 
 #bonusName{
@@ -222,7 +190,7 @@ body{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 6px; /* 세로줄 간격 조절하는 코드 */
+    gap: 12px;
     margin-top: 40px;
 }
 
@@ -236,7 +204,7 @@ body{
 
 .cell {
      width: 60px;
-    height: 58px; /* 슬롯 행간격 넓히는 코드 */
+    height: 55px; 
 
     background: transparent;
     border: none;
@@ -251,8 +219,7 @@ body{
 
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    padding-top: 8px;  /* 현재 슬롯에서 돌아가는 이미지를 위/아래로 움직이는 수치 */
+    align-items: center;
 }
 
 .cell.spinning {
@@ -286,7 +253,7 @@ body{
 
     border: 3px solid #fff2b0;
 
-    color: #2b1b00;
+    color: #4b2e02;
     font-size: 20px;
     font-weight: 900;
     letter-spacing: 2px;
@@ -298,7 +265,7 @@ body{
     align-items: center;
 
     box-shadow:
-        0 6px 0 #a85a00,
+        0 7px 0 #a85a00,
         0 20px 30px rgba(0,0,0,0.6),
         inset 0 2px 8px rgba(255,255,255,0.6);
 
@@ -326,139 +293,50 @@ body{
         inset 0 2px 6px rgba(0,0,0,0.3);
 }
 
-/* SCORE */
-#scoreUI{
-    position:absolute;
-    bottom:15px;  /* 박스 상하 이동 */
-    left:67.2%;  /* 박스 좌우 넓히기 */
-    transform:translateX(-220px);
+#scoreUI {
+    position: absolute;
+    bottom: 15px;
+    left: calc(50% - 180px);
 
-    width:100px;  /* 박스 좌우 넓히기 */
-    height:42px;
+    width: 120px;
+    height: 42px;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    background:linear-gradient(
-        180deg,
-        rgba(80,180,255,0.35),
-        rgba(0,100,255,0.20)
-    );
+    font-size: 14px;
+    font-weight: bold;
+    color: #00c6ff;
 
-    border:1px solid rgba(180,230,255,0.35);
-    border-radius:10px;
+    background: rgba(0, 198, 255, 0.08);
+    border: 1px solid rgba(0, 198, 255, 0.4);
 
-    color:white;
-    font-size:13px;    /* SPIN 글자 크기조절 */
-    font-weight:700;
+    border-radius: 12px;
 
-    text-shadow:
-        0 1px 2px rgba(0,0,0,0.6);
-
-    box-shadow:
-        0 0 12px rgba(0,120,255,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.15);
+    text-shadow: 0 0 10px rgba(0,198,255,0.6);
 }
 
+#spinUI {
+    position: absolute;
+    bottom: 15px;
+    left: calc(50% + 60px);
 
-/* SPIN COUNT */
-#spinUI{
-    position:absolute;
-    bottom:15px;  /* 박스 상하 이동 */
-    left:41%;  /* 박스 좌우 넓히기 */
-    transform:translateX(90px);
+    width: 120px;
+    height: 42px;
 
-    width:100px;  /* 박스 좌우 넓히기 */
-    height:42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ff4fd8;
 
-    background:linear-gradient(
-        180deg,
-        rgba(255,120,220,0.35),
-        rgba(255,20,147,0.20)
-    );
+    background: rgba(255, 79, 216, 0.08);
+    border: 1px solid rgba(255, 79, 216, 0.4);
 
-    border:1px solid rgba(255,220,240,0.35);
-    border-radius:10px;
+    border-radius: 12px;
 
-    color:white;
-    font-size:13px;    /* SPIN 글자 크기조절 */
-    font-weight:700;
-
-    text-shadow:
-        0 1px 2px rgba(0,0,0,0.6);
-
-    box-shadow:
-        0 0 12px rgba(255,20,147,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.15);
+    text-shadow: 0 0 10px rgba(255,79,216,0.6);
 }
-
-/* ⭐ 여기부터 추가 */
-.sideDecor{
-    position:absolute;
-    top:54%;
-    transform:translateY(-50%);
-    font-size:40px;
-    z-index:5;
-
-    animation:spinDecor 6s linear infinite;
-}
-
-.sideDecor.left{
-    left:5px;
-}
-
-.sideDecor.right{
-    right:5px;
-    animation-direction:reverse;
-}
-
-@keyframes spinDecor{
-    0%{
-        transform:translateY(-50%) rotate(0deg);
-    }
-    100%{
-        transform:translateY(-50%) rotate(360deg);
-    }
-}
-#topMarquee{
-
-    height:70px;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    font-size:28px;
-    font-weight:900;
-
-    color:gold;
-
-    background:
-    linear-gradient(
-        to bottom,
-        #3a2200,
-        #120800
-    );
-
-    border-bottom:3px solid #00d4ff;
-
-    text-shadow:
-        0 0 10px #fff,
-        0 0 25px gold,
-        0 0 45px gold;
-
-    animation:marqueeBlink 1.3s infinite;
-}
-
-@keyframes marqueeBlink{
-    0%{opacity:1;}
-    50%{opacity:.55;}
-    100%{opacity:1;}
-}
-
-

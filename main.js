@@ -20,17 +20,14 @@ let autoAimFish = null;
 let gameMode = "PLAY";
 let currentSlotSound = null;
 
-const effectPool = [];
-const MAX_EFFECT_POOL = 30;
-const fishPool = [];
-const MAX_POOL = 10;
+
 const MAX_EFFECTS = 30;
 const HIT_EFFECT_COOLDOWN = 0.05;
 const MAX_BULLETS = 50;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 55;                      //////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 10;                      //////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 function addScore(value) {
     score += value;
@@ -416,7 +413,7 @@ else if (win === "SMALLWIN") {
 
     addScore(100);
     playSfx(sounds.small_win, 2.0);
-    showBonusEvent("🔥 SMALL WIN!", "20px");
+    showBonusEvent("🔥 SMALL WIN!", "22px");
 }
 
     slotRunning = false;
@@ -956,58 +953,38 @@ function canSpawnHitEffect() {
 /* =========================
    HIT EFFECT
 ========================= */
-function createEffectToPool() {
+
+function spawnHitEffect(pos) {
 
     const group = new THREE.Group();
     const geo = new THREE.SphereGeometry(0.1, 2, 2);
 
-    for (let i = 0; i < 7; i++) {
+    const BLOOD_COUNT = 5;                               
+    const WATER_COUNT = 2;
+
+    for (let i = 0; i < BLOOD_COUNT + WATER_COUNT; i++) {
+
+        const isBlood = i < BLOOD_COUNT;
 
         const mat = new THREE.MeshBasicMaterial({
-            color: 0xcc0000,
+            color: isBlood ? 0xcc0000 : 0xcc0000,  // 죽을 때 나오는 피방울
             transparent: true,
-            opacity: 0
+            opacity: 1
         });
 
         const p = new THREE.Mesh(geo, mat);
+        p.position.copy(pos);
 
-        p.userData.velocity = new THREE.Vector3();
+        p.userData.velocity = new THREE.Vector3(
+    (Math.random() - 0.5) * (isBlood ? 0.08 : 0.05),
+    (Math.random() - 0.5) * (isBlood ? 0.08 : 0.05),
+    (Math.random() - 0.5) * (isBlood ? 0.08 : 0.05)
+);
 
         group.add(p);
     }
 
-    group.visible = false;
     scene.add(group);
-
-    effectPool.push(group);
-
-    return group;
-}
-
-function spawnHitEffect(pos) {
-
-    let group = effectPool.pop();
-
-    if (!group) {
-        group = createEffectToPool();
-    }
-
-    group.visible = true;
-    group.position.copy(pos);
-
-    group.children.forEach(p => {
-
-        p.material.opacity = 1;
-
-        p.position.set(0, 0, 0);
-
-        p.userData.velocity.set(
-            (Math.random() - 0.5) * 0.08,
-            (Math.random() - 0.5) * 0.08,
-            (Math.random() - 0.5) * 0.08
-        );
-    });
-
     effects.push(group);
 }
 
@@ -1048,12 +1025,13 @@ function spawnDeathEffect(pos) {   /////////////////////////////////  핏방울 
 
 function spawnFish() {
 
-      if (fishes.length >= MAX_FISH) return;                        // 주석을 풀면 고기는 10마리로 한정됨.
+    //  if (fishes.length >= MAX_FISH) return;                         주석을 풀면 고기는 10마리로 한정됨.
 
-    //const normalFishCount = fishes.reduce((count, f) => {           주석을 풀면 고기는 무제한 됨.
-    //return count + (f.userData?.type === "normal" ? 1 : 0);         주석을 풀면 고기는 무제한 됨.
-    //}, 0);                                                          주석을 풀면 고기는 무제한 됨.
-    //if (normalFishCount >= MAX_FISH) return;                        주석을 풀면 고기는 무제한 됨.
+    const normalFishCount = fishes.reduce((count, f) => {
+    return count + (f.userData?.type === "normal" ? 1 : 0);
+    }, 0);
+
+    if (normalFishCount >= MAX_FISH) return;
 
     // 일반 물고기만 필터링
     const normalFishModels = FISH_MODELS.filter(f => f.type === "normal");
@@ -1066,13 +1044,7 @@ function spawnFish() {
     const fish = SkeletonUtils.clone(gltf.scene);
 
     const mixer = new THREE.AnimationMixer(fish);
-    fish.userData.mixer = mixer;
-
-    gltf.animations?.forEach(a => {
-    const action = mixer.clipAction(a);
-    action.reset();
-    action.play();
-    });
+    gltf.animations?.forEach(c => mixer.clipAction(c).play());
 
     fish.scale.set(modelInfo.scale, modelInfo.scale, modelInfo.scale);
 
@@ -1162,9 +1134,7 @@ function startTurtleEvent() {
     sounds.turtle_theme.currentTime = 0;
     sounds.turtle_theme.play().catch(() => {});
 
-    setTimeout(() => {
     spawnSpecialFish(TURTLE);
-    }, 100);
 
     // ⭐ BONUS + SCORE 통합 처리
     addScore(turtle.spawnBonus + turtle.score);
@@ -1183,9 +1153,7 @@ function startSharkEvent() {
 
     const shark = FISH_MODELS.find(f => f.type === "shark");
 
-    setTimeout(() => {
-    spawnSpecialFish(SHARK);
-    }, 100);
+    currentEvent = "SHARK";
 
     // 🦈 사운드 추가 (핵심)
     sounds.shark_spawn.currentTime = 0;
@@ -1217,9 +1185,7 @@ function startWhaleEvent() {
 
     const whale = FISH_MODELS.find(f => f.type === "whale");
 
-    setTimeout(() => {
-    spawnSpecialFish(WHALE);
-    }, 100);
+    currentEvent = "WHALE";
 
     sounds.whale_theme.currentTime = 0;
     sounds.whale_theme.volume = 0.5 * sfxVolume;
@@ -1246,25 +1212,7 @@ function endWhaleEvent() {
         currentWhale = null;
     }
 }
-function returnFishToPool(fish) {
 
-    scene.remove(fish);
-
-    fish.userData.mixer?.stopAllAction();
-    fish.userData.mixer = null;
-
-    fish.visible = false;
-
-    const idx = fishes.indexOf(fish);
-    if (idx !== -1) fishes.splice(idx, 1);
-
-    // 👉 최소 초기화만 (과하게 지우지 않음)
-    fish.userData.hp = 0;
-
-    if (fishPool.length < MAX_POOL) {
-        fishPool.push(fish);
-    }
-}
 /* =========================
    🧠 SPECIAL SPAWN CORE
 ========================= */
@@ -1273,42 +1221,11 @@ function spawnSpecialFish(modelInfo) {
     const gltf = modelCache[modelInfo.url];
     if (!gltf?.scene) return;
 
-    // =========================
-    // 🧠 POOL 가져오기
-    // =========================
-    let fish = fishPool.pop();
-
-    // =========================
-    // ❗ fallback (필수 안정장치)
-    // =========================
-    if (!fish) {
-        fish = SkeletonUtils.clone(gltf.scene);
-        scene.add(fish);
-    } else {
-        fish.visible = true;
-    }
-
-    // =========================
-    // 🎬 애니메이션 (항상 새로 생성)
-    // =========================
-    // 기존 mixer 정리 (풀 재사용 대비 핵심)
-    if (fish.userData.mixer) {
-    fish.userData.mixer.stopAllAction();
-    }
+    const fish = SkeletonUtils.clone(gltf.scene);
 
     const mixer = new THREE.AnimationMixer(fish);
-    fish.userData.mixer = mixer;
+    gltf.animations?.forEach(a => mixer.clipAction(a).play());
 
-    // 애니메이션 재생
-    gltf.animations?.forEach(a => {
-    const action = mixer.clipAction(a);
-    action.reset();
-    action.play();
-    });
-
-    // =========================
-    // 📏 기본 세팅
-    // =========================
     fish.scale.setScalar(modelInfo.scale);
 
     fish.position.set(
@@ -1316,6 +1233,7 @@ function spawnSpecialFish(modelInfo) {
         -2 + Math.random() * 6,
         (Math.random() - 0.5) * 10
     );
+    
 
     fish.userData = {
         type: modelInfo.type,
@@ -1330,22 +1248,14 @@ function spawnSpecialFish(modelInfo) {
         swimPower: 0.1
     };
 
-    // =========================
-    // 🐋 고래 저장
-    // =========================
+    // 🔥 핵심 추가 (고래만 저장)
     if (modelInfo.type === "whale") {
         currentWhale = fish;
     }
 
-    // =========================
-    // 📦 등록
-    // =========================
     fishes.push(fish);
-
-    // fallback에서 이미 add 했을 수도 있지만 안전하게 한 번 더 처리
-    if (!fish.parent) {
-        scene.add(fish);
-    }
+    mixers.push(mixer);
+    scene.add(fish);
 
     return fish;
 }
@@ -1662,9 +1572,7 @@ function animate() {
    }
     //................................................................. 이벤트 물고기 대량출물 수정할 때 쓰는 코드
 
-    fishes.forEach(fish => {
-    fish.userData.mixer?.update(delta);
-    });
+    mixers.forEach(m => m.update(delta));
 
 /* =========================
    빛 효과 
@@ -1694,7 +1602,7 @@ function animate() {
 ========================= */
 
     spawnTimer += delta;
-    if (spawnTimer > 1.0) {
+    if (spawnTimer > 2.0) {
         spawnTimer = 0;
         spawnFish();
     }
@@ -1889,12 +1797,12 @@ function animate() {
 
                 sharkDie();
 
-                returnFishToPool(fish);
+                scene.remove(fish);
 
                 const idx = fishes.indexOf(fish);
                 if (idx !== -1) fishes.splice(idx, 1);
 
-                const mIdx = mixers.findIndex(m => m?.__fish === fish);
+                const mIdx = mixers.findIndex(m => m._root === fish);
                 if (mIdx !== -1) mixers.splice(mIdx, 1);
 
                 console.log("🐟 spawn check:", {
@@ -1903,6 +1811,8 @@ function animate() {
                 });
             }
         }
+
+
 
         // 🐟 NORMAL + EVENT
         else {
@@ -2016,4 +1926,4 @@ function animate() {
     renderer.setSize(oceanArea.clientWidth, oceanArea.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 });
-//test
+// test
