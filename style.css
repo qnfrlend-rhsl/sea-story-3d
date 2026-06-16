@@ -19,7 +19,6 @@ body{
 
 /* 게임기 전체 */
 #cabinet{
-
     position:relative;
 
     aspect-ratio: 720 / 1280;
@@ -31,15 +30,14 @@ body{
     border:8px solid #00d4ff;
     border-radius:22px;
 
-    background:
-    linear-gradient(
+    background: linear-gradient(
         to bottom,
         #0a3a4a,
         #06202a,
         #04141a
     );
 
-    overflow:hidden;
+    overflow:visible; /* ⭐ 핵심 수정 */
 
     box-shadow:
         0 0 25px rgba(0, 255, 255, 0.6),
@@ -383,6 +381,69 @@ body{
         0 0 12px rgba(255,20,147,0.25),
         inset 0 1px 0 rgba(255,255,255,0.15);
 }
+/* SPIN COUNT */
+#spinUI{
+    position:absolute;
+    bottom:10px;
+    left:41.7%;
+    transform:translateX(90px);
+
+    width:130px;
+    height:42px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(
+        180deg,
+        rgba(255,120,220,0.35),
+        rgba(255,20,147,0.20)
+    );
+
+    border:1px solid rgba(255,220,240,0.35);
+    border-radius:10px;
+
+    color:white;
+    font-size:15px;
+    font-weight:700;
+
+    text-shadow:
+        0 1px 2px rgba(0,0,0,0.6);
+
+    box-shadow:
+        0 0 12px rgba(255,20,147,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+/* ⭐ 여기부터 추가 */
+.sideDecor{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:40px;
+    z-index:5;
+
+    animation:spinDecor 6s linear infinite;
+}
+
+.sideDecor.left{
+    left:5px;
+}
+
+.sideDecor.right{
+    right:5px;
+    animation-direction:reverse;
+}
+
+@keyframes spinDecor{
+    0%{
+        transform:translateY(-50%) rotate(0deg);
+    }
+    100%{
+        transform:translateY(-50%) rotate(360deg);
+    }
+}
 #topMarquee{
 
     height:70px;
@@ -417,4 +478,35 @@ body{
     0%{opacity:1;}
     50%{opacity:.55;}
     100%{opacity:1;}
+}
+
+
+#cabinet::before{
+    content:"";
+    position:absolute;
+    inset:-6px;
+
+    border-radius:28px;
+
+    border:3px solid transparent;
+
+    border-top:3px solid #00ffff;
+    border-right:3px solid #00aaff;
+
+    box-shadow:
+        0 0 15px #00ffff,
+        0 0 40px #00aaff;
+
+    animation:ringRotate 3s linear infinite;
+
+    pointer-events:none;
+}
+
+@keyframes ringRotate{
+    0%{
+        transform:rotate(0deg);
+    }
+    100%{
+        transform:rotate(360deg);
+    }
 }
