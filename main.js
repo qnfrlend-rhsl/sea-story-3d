@@ -21,13 +21,13 @@ let gameMode = "PLAY";
 let currentSlotSound = null;
 
 
-const MAX_EFFECTS = 30;
+const MAX_EFFECTS = 10;
 const HIT_EFFECT_COOLDOWN = 0.05;
-const MAX_BULLETS = 50;
+const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 10;                      //////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 50;                      //////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 function addScore(value) {
     score += value;
