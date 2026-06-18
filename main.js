@@ -19,6 +19,13 @@ let lastHitEffectTime = 0;
 let autoAimFish = null;
 let gameMode = "PLAY";
 let currentSlotSound = null;
+let eventLock = false;
+let eventActive = false;
+let eventFishAlive = false;
+let turtleVolume = 0.5;
+let sharkVolume = 0.5;
+
+
 
 
 const MAX_EFFECTS = 10;
@@ -27,7 +34,7 @@ const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 50;                      //////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 35;                      //////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 function addScore(value) {
     score += value;
@@ -63,6 +70,7 @@ const sounds = {
     big_win: new Audio("./sounds/big_win.mp3"),
     jackpot_win: new Audio("./sounds/jackpot_win.mp3"),
 };
+
 function playSfx(audio, volume = 0.8) {
     const s = new Audio(audio.src);
     s.volume = Math.min(1, volume * sfxVolume);
@@ -743,8 +751,8 @@ const FISH_MODELS = [
     // ======================
     // 🦈🐋🐢 이벤트 물고기 (통합됨)
     // ======================
-    { url: "./models/turtle.glb", weight: 0.2, speed: 0.05, turnSpeed: 0.03, scale: 0.010, hp: 50, score: 1000, spawnBonus: 1000, type: "turtle" },
-    { url: "./models/shark.glb", weight: 0.1, speed: 0.08, turnSpeed: 0.03, scale: 1.6, hp: 450, score: 3500, spawnBonus: 500, type: "shark" },
+    { url: "./models/turtle.glb", weight: 0.2, speed: 0.05, turnSpeed: 0.03, scale: 0.010, hp: 50, score: 1000, spawnBonus: 500, type: "turtle" },
+    { url: "./models/shark.glb", weight: 0.1, speed: 0.08, turnSpeed: 0.03, scale: 1.6, hp: 450, score: 3000, spawnBonus: 500, type: "shark" },
     { url: "./models/whale.glb", weight: 0.05, speed: 0.02, turnSpeed: 0.03, scale: 0.08, hp: 999, score: 10000, spawnBonus: 10000, type: "whale" }
 ];
 
@@ -1127,54 +1135,87 @@ const WHALE = FISH_MODELS.find(f => f.type === "whale");
 ========================= */
 function startTurtleEvent() {
 
-    const turtle = FISH_MODELS.find(f => f.type === "turtle");
+    if (eventActive || eventFishAlive) return;
+    eventActive = true;
+    eventFishAlive = true;
 
     currentEvent = "TURTLE";
 
+    sounds.turtle_theme.loop = true;
     sounds.turtle_theme.currentTime = 0;
+    sounds.turtle_theme.volume = turtleVolume * sfxVolume;
     sounds.turtle_theme.play().catch(() => {});
 
-    spawnSpecialFish(TURTLE);
+    const turtle = spawnSpecialFish(TURTLE);
 
-    // ⭐ BONUS + SCORE 통합 처리
-    addScore(turtle.spawnBonus + turtle.score);
-
+    addScore(500);
     showBonusEvent("🐢 TURTLE BONUS!", "20px");
 
+/*
+///////////////////////////////////////////////////////////////  여기부터 시간 안에 못 잡으면 사라지는 코드
     setTimeout(() => {
+    if (currentEvent === "TURTLE") {
+
         sounds.turtle_theme.pause();
+        sounds.turtle_theme.currentTime = 0;
+
         currentEvent = null;
-    }, 30000);
-}
+        eventActive = false;
+        eventFishAlive = false;
+
+        fishes.forEach(f => {
+            if (f.userData.type === "turtle") {
+                scene.remove(f);
+            }
+        });
+       }
+     }, 30000);                     ////////////////////////////////3000  (현재 30초)
+     ///////////////////////////////////////////////////////////////  여기까지 시간 안에 잡지못하면 사라짐 코드
+*/
+    }
 /* =========================
    🦈 SHARK EVENT (보스 1)
 ========================= */
 function startSharkEvent() {
 
-    const shark = FISH_MODELS.find(f => f.type === "shark");
+    if (eventActive || eventFishAlive) return;
+    eventActive = true;
+    eventFishAlive = true;
 
     currentEvent = "SHARK";
 
-    // 🦈 사운드 추가 (핵심)
+    sounds.shark_spawn.loop = true;
     sounds.shark_spawn.currentTime = 0;
-    sounds.shark_spawn.volume = 0.5 * sfxVolume;
+    sounds.shark_spawn.volume = sharkVolume * sfxVolume;
     sounds.shark_spawn.play().catch(() => {});
 
-    const count = 1
+    spawnSpecialFish(SHARK);
 
-    for (let i = 0; i < count; i++) {
-        spawnSpecialFish(SHARK);
-    }
-
-    addScore(shark.spawnBonus + shark.score);
-    // 🦈 문구
+    addScore(500);     /////////////////////////////////////////// 상어 등장하면 주는 보너스.
     showBonusEvent("🦈 SHARK HUNT!", "20px");
 
-    // ⛔ 이벤트 종료
+/*
+///////////////////////////////////////////////////////////////  여기부터 시간 안에 못 잡으면 사라지는 코드
     setTimeout(() => {
+    if (currentEvent === "SHARK") {
+        sounds.shark_spawn.pause();
+        sounds.shark_spawn.currentTime = 0;
+
         currentEvent = null;
-    }, 30000);
-}
+        eventActive = false;
+        eventFishAlive = false;
+
+        fishes.forEach(f => {
+            if (f.userData.type === "shark") {
+                scene.remove(f);
+            }
+        });
+       }
+     }, 30000);                     ////////////////////////////////3000  (현재 30초)
+     ///////////////////////////////////////////////////////////////  여기까지 시간 안에 잡지못하면 사라짐 코드
+*/
+
+    }
 
 /* =========================
    🐋 WHALE EVENT (보스 최종)
@@ -1187,8 +1228,9 @@ function startWhaleEvent() {
 
     currentEvent = "WHALE";
 
+    sounds.whale_theme.loop = true; 
     sounds.whale_theme.currentTime = 0;
-    sounds.whale_theme.volume = 0.5 * sfxVolume;
+    sounds.whale_theme.volume = 1.0 * sfxVolume;
     sounds.whale_theme.play().catch(() => {});
 
     spawnSpecialFish(WHALE);
@@ -1205,6 +1247,8 @@ function startWhaleEvent() {
 function endWhaleEvent() {
 
     sounds.whale_theme.pause();
+    sounds.whale_theme.currentTime = 0; // 추가
+
     currentEvent = null;
 
     if (currentWhale) {
@@ -1572,7 +1616,7 @@ function animate() {
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && eventCooldown > 20) {
+    if (!currentEvent && !eventFishAlive && eventCooldown > 20) {
 
     const r = Math.random();
     if (r < 0.9) {                //................................ 전체 이벤트 확률 20%
@@ -1821,6 +1865,14 @@ function animate() {
                     lastHitEffectTime = now;
                 }
 
+                    playHit();
+                    addScore(3000); ////////////////////////////////////////  상어 잡으면 주는 보너스
+
+                    if (fish.userData.type === "shark") {
+                     sounds.shark_spawn.pause();
+                     sounds.shark_spawn.currentTime = 0;
+                    }
+
                 // sharkDie();
 
                 scene.remove(fish);
@@ -1857,7 +1909,24 @@ function animate() {
                 }
 
                 playHit();
-                addScore(fish.userData.score);
+                addScore(fish.userData.score);   ////////////////////// 거북이 잡으면 주는 보너스. 
+                if (fish.userData.type === "turtle") {
+                    sounds.turtle_theme.pause();
+                    sounds.turtle_theme.currentTime = 0;
+                    eventFishAlive = false;
+                }
+                
+                if (fish.userData.type === "shark") {
+                    sounds.shark_spawn.pause();
+                    sounds.shark_spawn.currentTime = 0;
+                    eventFishAlive = false;
+                }
+                
+                if (fish.userData.type === "whale") {
+                    sounds.whale_theme.pause();
+                    sounds.whale_theme.currentTime = 0;
+                    eventFishAlive = false;
+                }
 
                 scene.remove(fish);
                 fishes.splice(j, 1);
