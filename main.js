@@ -744,8 +744,8 @@ const FISH_MODELS = [
     // 🦈🐋🐢 이벤트 물고기 (통합됨)
     // ======================
     { url: "./models/turtle.glb", weight: 0.2, speed: 0.05, turnSpeed: 0.03, scale: 0.010, hp: 50, score: 1000, spawnBonus: 1000, type: "turtle" },
-    { url: "./models/shark.glb", weight: 0.1, speed: 0.08, turnSpeed: 0.03, scale: 1.7, hp: 70, score: 3500, spawnBonus: 500, type: "shark" },
-    { url: "./models/whale.glb", weight: 0.05, speed: 0.02, turnSpeed: 0.03, scale: 0.1, hp: 999, score: 10000, spawnBonus: 10000, type: "whale" }
+    { url: "./models/shark.glb", weight: 0.1, speed: 0.08, turnSpeed: 0.03, scale: 1.6, hp: 450, score: 3500, spawnBonus: 500, type: "shark" },
+    { url: "./models/whale.glb", weight: 0.05, speed: 0.02, turnSpeed: 0.03, scale: 0.08, hp: 999, score: 10000, spawnBonus: 10000, type: "whale" }
 ];
 
 const fishes = [];
@@ -1236,17 +1236,33 @@ function spawnSpecialFish(modelInfo) {
     
 
     fish.userData = {
-        type: modelInfo.type,
-        hp: modelInfo.hp,
-        score: modelInfo.score,
-        spawnBonus: modelInfo.spawnBonus,
-        speed: modelInfo.speed,
-        turnSpeed: modelInfo.turnSpeed,
-        target: new THREE.Vector3(),
-        smoothDir: new THREE.Vector3(),
-        swimOffset: Math.random() * Math.PI * 2,
-        swimPower: 0.1
-    };
+    type: modelInfo.type,
+    hp: modelInfo.hp,
+    score: modelInfo.score,
+    spawnBonus: modelInfo.spawnBonus,
+
+    speed: modelInfo.speed,
+    turnSpeed: modelInfo.turnSpeed,
+
+    target: new THREE.Vector3(),
+
+    smoothDir: new THREE.Vector3(
+        Math.random() - 0.5,
+        0,
+        Math.random() - 0.5
+    ).normalize(),
+
+    swimOffset: Math.random() * Math.PI * 2,
+    swimPower: 0.1,
+
+    targetTimer: 0,
+    stuckTimer: 0,
+    lastMovePos: fish.position.clone()
+};
+
+setNewTarget(fish);
+
+
 
     // 🔥 핵심 추가 (고래만 저장)
     if (modelInfo.type === "whale") {
@@ -1556,10 +1572,10 @@ function animate() {
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && eventCooldown > 600) {
+    if (!currentEvent && eventCooldown > 20) {
 
     const r = Math.random();
-    if (r < 0.2) {                //................................ 전체 이벤트 확률 20%
+    if (r < 0.9) {                //................................ 전체 이벤트 확률 20%
         const rr = Math.random();
 
 
@@ -1627,6 +1643,16 @@ function animate() {
 ========================= */
 
     fishes.forEach(fish => {
+
+    if (!fish.userData.target) {
+        console.error("target 없음", fish);
+        return;
+    }
+
+    if (!fish.userData.lastMovePos) {
+        console.error("lastMovePos 없음", fish);
+        return;
+    }
 
     const distToCam = fish.position.distanceTo(camera.position);
     const isFar = distToCam > 25;
@@ -1782,7 +1808,7 @@ function animate() {
         // 🦈 SHARK
         if (fish.userData.type === "shark") {
 
-            fish.userData.hp -= 10;
+            fish.userData.hp -= 1;   ///////////////////////////////////////  상어 총알 타격치 수치
 
             // ❌ 삭제됨: fish.scale.multiplyScalar(0.999);
 
@@ -1795,7 +1821,7 @@ function animate() {
                     lastHitEffectTime = now;
                 }
 
-                sharkDie();
+                // sharkDie();
 
                 scene.remove(fish);
 
