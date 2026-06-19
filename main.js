@@ -1626,10 +1626,10 @@ function animate() {
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && eventCooldown > 20){        //////////
+    if (!currentEvent && eventCooldown > 60){        //////////  60은 1분, 300은 5분
 
     const r = Math.random();
-    if (r < 0.9) {                //................................ 전체 이벤트 확률 90%
+    if (r < 0.5) {                //................................ 전체 이벤트 확률 0.5는 50%를 뜻함.
         const rr = Math.random();
 
 
