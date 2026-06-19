@@ -20,9 +20,10 @@ body{
 #cabinet::before {
     content: "";
     position: absolute;
-    inset: -10px; /* 살짝 여백 주면 더 자연스러움 */
+    inset: 0;
 
-    background: url("./sea-story-frame.png") center/contain no-repeat;
+    background: url("./sea-story-frame.png") center / 100% 100% no-repeat;
+
     pointer-events: none;
     z-index: 999;
 }
@@ -32,19 +33,13 @@ body{
     z-index: 1;
 
     aspect-ratio: 720 / 1280;
-
     height: 100dvh;
-    width: 100vw;
-
-    max-height: 100dvh;
-    max-width: calc(100dvh * 720 / 1280);
-
-    margin: auto;
 
     display: flex;
     flex-direction: column;
 
     background: #000;
+    overflow: hidden;
 }
 
 /* 위 4 */
