@@ -36,6 +36,14 @@ const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
 const MAX_FISH = 10;                      //////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
+
+function endEvent() {
+    currentEvent = null;
+    eventActive = false;
+    eventFishAlive = false;
+    //eventCooldown = 0;
+}
+
 function addScore(value) {
     score += value;
     updateSpinCount();   // ⭐ 스핀 자동 갱신
@@ -130,7 +138,7 @@ function startBGM() {
     if (bgmStarted && !bgm.paused) return;
 
     bgm.loop = true;
-    bgm.volume = 0.8;
+    bgm.volume = 0.6;
     bgm.muted = false;
 
     const playPromise = bgm.play();
@@ -746,7 +754,7 @@ const FISH_MODELS = [
     { url: "./models/fish.glb", weight: 40, speed: 0.02, turnSpeed: 0.2, scale: 0.05, hp: 1, score: 10, type: "normal" },
     { url: "./models/fish2.glb", weight: 50, speed: 0.050, turnSpeed: 0.08, scale: 0.20, hp: 3, score: 30, type: "normal" },
     { url: "./models/fish3.glb", weight: 5, speed: 0.050, turnSpeed: 0.03, scale: 0.05, hp: 5, score: 30, type: "normal" },
-    { url: "./models/fish4.glb", weight: 3, speed: 0.025, turnSpeed: 0.03, scale: 0.2, hp: 10, score: 30, type: "normal" },
+    { url: "./models/fish4.glb", weight: 3, speed: 0.025, turnSpeed: 0.03, scale: 0.3, hp: 10, score: 30, type: "normal" },
 
     // ======================
     // 🦈🐋🐢 이벤트 물고기 (통합됨)
@@ -1250,6 +1258,8 @@ function endWhaleEvent() {
     sounds.whale_theme.currentTime = 0; // 추가
 
     currentEvent = null;
+    eventActive = false;
+    eventFishAlive = false;
 
     if (currentWhale) {
         scene.remove(currentWhale);
@@ -1616,10 +1626,10 @@ function animate() {
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && !eventFishAlive && eventCooldown > 20) {
+    if (!currentEvent && eventCooldown > 20){        //////////
 
     const r = Math.random();
-    if (r < 0.9) {                //................................ 전체 이벤트 확률 20%
+    if (r < 0.9) {                //................................ 전체 이벤트 확률 90%
         const rr = Math.random();
 
 
@@ -1871,6 +1881,8 @@ function animate() {
                     if (fish.userData.type === "shark") {
                      sounds.shark_spawn.pause();
                      sounds.shark_spawn.currentTime = 0;
+
+                     endEvent();
                     }
 
                 // sharkDie();
@@ -1913,19 +1925,19 @@ function animate() {
                 if (fish.userData.type === "turtle") {
                     sounds.turtle_theme.pause();
                     sounds.turtle_theme.currentTime = 0;
-                    eventFishAlive = false;
+                    endEvent();
                 }
                 
                 if (fish.userData.type === "shark") {
                     sounds.shark_spawn.pause();
                     sounds.shark_spawn.currentTime = 0;
-                    eventFishAlive = false;
+                    endEvent();
                 }
                 
                 if (fish.userData.type === "whale") {
                     sounds.whale_theme.pause();
                     sounds.whale_theme.currentTime = 0;
-                    eventFishAlive = false;
+                    endEvent();
                 }
 
                 scene.remove(fish);
