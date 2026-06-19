@@ -115,7 +115,7 @@ body{
 }
 
 #bonusTitle{
-    font-size:42px;
+    font-size:33px;                            /* 화면에 보너스라고 나오는 글자 크기 조절 코드 */
     font-weight:900;
     color:gold;
 
@@ -133,7 +133,7 @@ body{
 #bonusName{
     margin-top:10px;
 
-    font-size:18px;
+    font-size:18px;                           /* 화면에 보너스 밑에 나오는 글자 크기 조절 코드 */
     font-weight:bold;
 
     color:white;
@@ -245,6 +245,7 @@ body{
 .col {
     width: 80px;
     height: 200px;        /* 3칸 보이는 영역 */
+    
     overflow: hidden;     /* ⭐ 릴 핵심 */
     position: relative;
 
