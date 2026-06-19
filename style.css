@@ -17,9 +17,9 @@ body{
     align-items:center;
 }
 
-body::before {
+#cabinet::before {
     content: "";
-    position: fixed;
+    position: absolute;
     inset: 0;
     background: url("./sea-story-frame.png") center/contain no-repeat;
     pointer-events: none;
@@ -32,13 +32,17 @@ body::before {
 
     aspect-ratio: 720 / 1280;
 
-    height: 100dvh;   /* ⭐ 기준은 height 하나로 고정 */
-    width: auto;
+    height: 100dvh;
+    width: 100vw;
+
+    max-height: 100dvh;
+    max-width: calc(100dvh * 720 / 1280);
+
+    margin: auto;
 
     display: flex;
     flex-direction: column;
 
-    border: 4px solid #444;
     background: #000;
 }
 
