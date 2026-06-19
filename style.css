@@ -206,7 +206,7 @@ body{
     flex-direction: row;
     justify-content: center;
     gap: 12px;
-    margin-top: 28px;                                  /* 슬롯 이미지들 전체 위아래로 이동하는 코드 */      
+    margin-top: 30px;                                  /* 슬롯 이미지들 전체 위아래로 이동하는 코드 */      
 }
 
 .row {
@@ -255,7 +255,7 @@ body{
 
 #spinBtn {    
     position: absolute;
-    bottom: 45px;                                             /* 🔥 스핀 버튼 위 아래로 이동 코드 */
+    bottom: 50px;                                             /* 🔥 스핀 버튼 위 아래로 이동 코드 */
     left: 50%;
     transform: translateX(-50%);
 
@@ -310,7 +310,7 @@ body{
 
 #scoreUI {
     position: absolute;
-    bottom: 40px;                                            /* 🔥 스코어 버튼 코드 */
+    bottom: 44px;                                            /* 🔥 스코어 버튼 코드 */
     left: calc(50% - 180px);
 
     width: 120px;
@@ -334,7 +334,7 @@ body{
 
 #spinUI {
     position: absolute;
-    bottom: 40px;                                            /* 🔥 스코어 버튼 코드 */
+    bottom: 44px;                                            /* 🔥 스코어 버튼 코드 */
     left: calc(50% + 60px);
 
     width: 120px;
