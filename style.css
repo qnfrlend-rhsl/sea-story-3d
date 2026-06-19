@@ -31,7 +31,9 @@ body::before {
     z-index: 1;
 
     aspect-ratio: 720 / 1280;
-    height: 95vh;
+
+    width: min(100vw, calc(100vh * 720 / 1280));
+    height: auto;
 
     display: flex;
     flex-direction: column;
