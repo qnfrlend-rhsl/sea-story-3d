@@ -62,11 +62,11 @@ body{
 
     background: linear-gradient(
         to bottom,
-        #001624,
+        #001624,                                                       /* 슬롯 바탕 색상*/
         #023f68
     );
 
-    border-top:3px solid #012136;
+    border-top:3px solid #012136;                                      /* 슬롯과 게임사이 색상*/
 
     display:flex;
     justify-content:center;
@@ -206,7 +206,7 @@ body{
     flex-direction: row;
     justify-content: center;
     gap: 12px;
-    margin-top: 25px;
+    margin-top: 28px;                                  /* 슬롯 이미지들 전체 위아래로 이동하는 코드 */      
 }
 
 .row {
@@ -253,9 +253,9 @@ body{
     align-items: center;
 }
 
-#spinBtn {                                                /* 🔥 스핀 버튼 코드 */
+#spinBtn {    
     position: absolute;
-    bottom: 25px;   /* 🔥 맨 아래 고정 */
+    bottom: 45px;                                             /* 🔥 스핀 버튼 위 아래로 이동 코드 */
     left: 50%;
     transform: translateX(-50%);
 
@@ -308,9 +308,9 @@ body{
         inset 0 2px 6px rgba(0,0,0,0.3);
 }
 
-#scoreUI {                                            /* 🔥 스코어 버튼 코드 */
+#scoreUI {
     position: absolute;
-    bottom: 20px;
+    bottom: 40px;                                            /* 🔥 스코어 버튼 코드 */
     left: calc(50% - 180px);
 
     width: 120px;
@@ -332,9 +332,9 @@ body{
     text-shadow: 0 0 10px rgba(0,198,255,0.6);
 }
 
-#spinUI {                                            /* 🔥 스핀갯수 버튼 코드 */
+#spinUI {
     position: absolute;
-    bottom: 20px;
+    bottom: 40px;                                            /* 🔥 스코어 버튼 코드 */
     left: calc(50% + 60px);
 
     width: 120px;
