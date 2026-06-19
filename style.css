@@ -310,8 +310,8 @@ body{
 
 #scoreUI {
     position: absolute;
-    bottom: 44px;                                            /* 🔥 스코어 버튼 코드 */
-    left: calc(50% - 180px);
+    bottom: 44px;                                            /* 🔥 스코어 버튼 코드 위 아래 이동 코드*/
+    left: calc(50% - 173px);                                  /* 🔥 스코어 버튼 코드 좌우 이동 코드 */
 
     width: 120px;
     height: 42px;
@@ -334,8 +334,8 @@ body{
 
 #spinUI {
     position: absolute;
-    bottom: 44px;                                            /* 🔥 스코어 버튼 코드 */
-    left: calc(50% + 60px);
+    bottom: 44px;                                            /* 🔥 스코어 버튼 코드 위 아래 이동 코드*/
+    left: calc(50% + 53px);                                  /* 🔥 스코어 버튼 코드 좌우 이동 코드 */
 
     width: 120px;
     height: 42px;
