@@ -32,8 +32,8 @@ body::before {
 
     aspect-ratio: 720 / 1280;
 
-    width: min(100vw, calc(100vh * 720 / 1280));
-    height: auto;
+    height: 100dvh;   /* ⭐ 기준은 height 하나로 고정 */
+    width: auto;
 
     display: flex;
     flex-direction: column;
