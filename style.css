@@ -251,7 +251,7 @@ body::before {
     align-items: center;
 }
 
-#spinBtn {
+#spinBtn {                                                /* 🔥 스핀 버튼 코드 */
     position: absolute;
     bottom: 25px;   /* 🔥 맨 아래 고정 */
     left: 50%;
@@ -306,7 +306,7 @@ body::before {
         inset 0 2px 6px rgba(0,0,0,0.3);
 }
 
-#scoreUI {
+#scoreUI {                                            /* 🔥 스코어 버튼 코드 */
     position: absolute;
     bottom: 20px;
     left: calc(50% - 180px);
@@ -330,7 +330,7 @@ body::before {
     text-shadow: 0 0 10px rgba(0,198,255,0.6);
 }
 
-#spinUI {
+#spinUI {                                            /* 🔥 스핀갯수 버튼 코드 */
     position: absolute;
     bottom: 20px;
     left: calc(50% + 60px);
