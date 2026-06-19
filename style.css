@@ -20,10 +20,11 @@ body{
 #cabinet::before {
     content: "";
     position: absolute;
-    inset: 0;
+    inset: -10px; /* 살짝 여백 주면 더 자연스러움 */
+
     background: url("./sea-story-frame.png") center/contain no-repeat;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 999;
 }
 
 #cabinet {
