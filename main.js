@@ -34,7 +34,7 @@ const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 10;                      //////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 25;                      //////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 
 function endEvent() {
@@ -1677,7 +1677,7 @@ function animate() {
     spawnTimer = 0;
 
     //////////////////////// 🔥 물고기 개수 제한 추가
-    if (fishes.length < 12) { ///////////////////// 🔥 현재 12마리로 제한
+    if (fishes.length < 24) { /////////////////////////////////////////////////// 🔥 현재 12마리로 제한
         spawnFish();
     }
     }
