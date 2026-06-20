@@ -34,7 +34,7 @@ const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 30;                      //////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 30;                      /////////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 
 function endEvent() {
@@ -534,7 +534,7 @@ spinBtn.addEventListener("click", spinSlot);
 
 const fireBtn = document.getElementById("fireBtn");
 
-//scene.add(new THREE.AxesHelper(10));     //    화면에 중심을 알려주는 좌표
+//scene.add(new THREE.AxesHelper(10));     ///////////////////////////////////    화면에 중심을 알려주는 좌표
 
 /* 🌊 배경 + 안개 */
 const textureLoader = new THREE.TextureLoader();
@@ -543,7 +543,7 @@ textureLoader.load("./bg.png", (texture) => {
     texture.colorSpace = THREE.SRGBColorSpace;
     scene.background = texture;
 });
-scene.fog = new THREE.Fog(0x003355, 30, 120); // 👈 살짝 완화 (빛 보이게)
+scene.fog = new THREE.Fog(0x003355, 30, 120); ////////////////////////////////////// 👈 살짝 완화 (빛 보이게)
 
 /* 🌞 조명 */
 scene.add(new THREE.AmbientLight(0xffffff, 1.5));
@@ -600,13 +600,13 @@ function createBeam(x, z) {
 
 /* 🎥 카메라 */
 const camera = new THREE.PerspectiveCamera(
-    32,   ////////////////////////////////////////////////// 기본 줌 가장 중요한 줌
+    32,   //////////////////////////////////////////////////////////////////////////// 기본 줌 가장 중요한 줌
     oceanArea.clientWidth / oceanArea.clientHeight,
     0.1,
     100
 );
 
-camera.position.set(0, 25, 45);  ///////////////////////////   거리줌 카메라 이동
+camera.position.set(0, 25, 45);  /////////////////////////////////////////////////////// 거리줌 카메라 이동
 camera.lookAt(1.5, 0, 0);
 
 scene.add(camera);
@@ -780,7 +780,7 @@ const floorBubbles = [];
 function spawnFloorBubble() {
 
     const bubble = new THREE.Mesh(
-        new THREE.SphereGeometry(0.05 + Math.random() * 0.25, 6, 6),   //  기포 크기 조절
+        new THREE.SphereGeometry(0.05 + Math.random() * 0.25, 6, 6),   ///////////////////// 기포 크기 조절
         new THREE.MeshBasicMaterial({
             color: 0x4f8fb3,
             transparent: true,
@@ -983,7 +983,7 @@ function spawnHitEffect(pos) {
         const isBlood = i < BLOOD_COUNT;
 
         const mat = new THREE.MeshBasicMaterial({
-            color: isBlood ? 0xcc0000 : 0xcc0000,  // 죽을 때 나오는 피방울
+            color: isBlood ? 0xcc0000 : 0xcc0000,  /////////////////////////////////// 죽을 때 나오는 피방울
             transparent: true,
             opacity: 1
         });
@@ -1004,7 +1004,7 @@ function spawnHitEffect(pos) {
     effects.push(group);
 }
 
-function spawnDeathEffect(pos) {   /////////////////////////////////  핏방울 퍼지는 코드
+function spawnDeathEffect(pos) {   ////////////////////////////////////////////////////  핏방울 퍼지는 코드
 
     const group = new THREE.Group();
     const geo = new THREE.SphereGeometry(0.15, 6, 6);
@@ -1041,7 +1041,7 @@ function spawnDeathEffect(pos) {   /////////////////////////////////  핏방울 
 
 function spawnFish() {
 
-    //  if (fishes.length >= MAX_FISH) return;                         주석을 풀면 고기는 10마리로 한정됨.
+      if (fishes.length >= MAX_FISH) return;  /////////////////////////////주석을 풀면 고기는 10마리로 한정됨.
 
     const normalFishCount = fishes.reduce((count, f) => {
     return count + (f.userData?.type === "normal" ? 1 : 0);
@@ -1160,7 +1160,7 @@ function startTurtleEvent() {
     showBonusEvent("🐢 TURTLE BONUS!", "20px");
 
 /*
-///////////////////////////////////////////////////////////////  여기부터 시간 안에 못 잡으면 사라지는 코드
+//////////////////////////////////////////////////////////////////// 여기부터 시간 안에 못 잡으면 사라지는 코드
     setTimeout(() => {
     if (currentEvent === "TURTLE") {
 
@@ -1199,11 +1199,11 @@ function startSharkEvent() {
 
     spawnSpecialFish(SHARK);
 
-    addScore(500);     /////////////////////////////////////////// 상어 등장하면 주는 보너스.
+    addScore(500);     //////////////////////////////////////////////////////////// 상어 등장하면 주는 보너스.
     showBonusEvent("🦈 SHARK HUNT!", "20px");
 
 /*
-///////////////////////////////////////////////////////////////  여기부터 시간 안에 못 잡으면 사라지는 코드
+//////////////////////////////////////////////////////////////////// 여기부터 시간 안에 못 잡으면 사라지는 코드
     setTimeout(() => {
     if (currentEvent === "SHARK") {
         sounds.shark_spawn.pause();
@@ -1255,7 +1255,7 @@ function startWhaleEvent() {
 function endWhaleEvent() {
 
     sounds.whale_theme.pause();
-    sounds.whale_theme.currentTime = 0; // 추가
+    sounds.whale_theme.currentTime = 0; /// 추가
 
     currentEvent = null;
     eventActive = false;
@@ -1334,7 +1334,7 @@ setNewTarget(fish);
    GUN + AIM + SHOOT
 ========================= */
 
-const cannonBase = new THREE.Group();   // 화면에서 보이이는 대포의 위치
+const cannonBase = new THREE.Group();   /////////////////////////////////////// 화면에서 보이이는 대포의 위치
 
 cannonBase.position.set(
     0,
@@ -1372,7 +1372,7 @@ cannonBarrel.position.y = 0.5;
 
 cannonBase.add(cannonBarrel);
 
-const muzzle = new THREE.Object3D();   //  충구에서 나오는 물방울 거리
+const muzzle = new THREE.Object3D();   ////////////////////////////////////////  충구에서 나오는 물방울 거리
 
 muzzle.position.set(
     0.9,
@@ -1573,7 +1573,7 @@ function spawnMuzzleBubbles(pos) {
     for (let i = 0; i < 20; i++) {
 
         const bubble = new THREE.Mesh(
-            new THREE.SphereGeometry(0.05, 6, 6),   /////////////////////////  총구에서 나오는 기포 효과
+            new THREE.SphereGeometry(0.05, 6, 6),   //////////////////////////////  총구에서 나오는 기포 효과
             new THREE.MeshBasicMaterial({
                 color: 0xffffff,
                 transparent: true,
@@ -1596,7 +1596,7 @@ function spawnMuzzleBubbles(pos) {
     effects.push(group);
 }
 
-function showBonusEvent(text, size = "24px") {//...............................  이벤트 문구 기본텍스트 크기
+function showBonusEvent(text, size = "24px") {/////////////////////////////////  이벤트 문구 기본텍스트 크기
 
     const fireBtn = document.getElementById("fireBtn");
     const box = document.getElementById("bonusEvent");
@@ -1621,26 +1621,26 @@ function animate() {
     requestAnimationFrame(animate);
 
     const delta = clock.getDelta();
-     //................................................................. 이벤트 물고기 대량출물 수정할 때 쓰는 코드
+     ////////////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
     
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && eventCooldown > 60){        //////////  60은 1분, 300은 5분
+    if (!currentEvent && eventCooldown > 60){ /////////////////////////////////////////  60은 1분, 300은 5분
 
     const r = Math.random();
-    if (r < 0.5) {                //................................ 전체 이벤트 확률 0.5는 50%를 뜻함.
+    if (r < 0.5) {                ///////////////////////////////////////// 전체 이벤트 확률 0.5는 50%를 뜻함.
         const rr = Math.random();
 
 
-    if (rr < 0.5) startTurtleEvent();   //................................ 10%
-    else if (rr < 0.8) startSharkEvent();   //............................. 6%
-    else startWhaleEvent();   //.......................................... 4%
+    if (rr < 0.5) startTurtleEvent();   /////////////////////////////////////// 10%
+    else if (rr < 0.8) startSharkEvent();   //////////////////////////////////// 6%
+    else startWhaleEvent();   ////////////////////////////////////////////////// 4%
     }
 
     eventCooldown = 0;
    }
-    //................................................................. 이벤트 물고기 대량출물 수정할 때 쓰는 코드
+    /////////////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
 
     mixers.forEach(m => m.update(delta));
 
@@ -1654,7 +1654,7 @@ function animate() {
     });
     scene.children.forEach(obj => {
     if (obj.isAmbientLight) {
-        obj.intensity = 1.5 + Math.sin(Date.now() * 0.0001) * 0.3;   //  전체 화면을 어두웠다가 밝아지는 느낌주는 코드
+        obj.intensity = 1.5 + Math.sin(Date.now() * 0.0001) * 0.3; ///전체 화면을 어두웠다가 밝아지는 느낌주는 코드
     }
 });
 /* =========================
@@ -1677,7 +1677,7 @@ function animate() {
     spawnTimer = 0;
 
     //////////////////////// 🔥 물고기 개수 제한 추가
-    if (fishes.length < 30) { /////////////////////////////////////////////////// 🔥 현재 12마리로 제한
+    if (fishes.length < 30) { //////////////////////////////////////////////    ///// 🔥 현재 30마리로 제한
         spawnFish();
     }
     }
