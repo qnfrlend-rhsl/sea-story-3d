@@ -1672,10 +1672,16 @@ function animate() {
 ========================= */
 
     spawnTimer += delta;
+
     if (spawnTimer > 2.0) {
-        spawnTimer = 0;
+    spawnTimer = 0;
+
+    //////////////////////// 🔥 물고기 개수 제한 추가
+    if (fishes.length < 12) { ///////////////////// 🔥 현재 12마리로 제한
         spawnFish();
     }
+    }
+
     if (Math.random() < 0.02) {
     spawnFloorBubble();
     }
@@ -1849,7 +1855,7 @@ function animate() {
     const fish = fishes[j];
 
     const hitRadius =
-        fish.userData.type === "shark" ? 2.5 : 1.2;
+        fish.userData.type === "shark" ? 3.0 : 1.8; ////현재 상어는 3.0, 물고기는1.8 쉽게 하려면 수치올리면 됨.
 
     const hitRadiusSq = hitRadius * hitRadius;
 
