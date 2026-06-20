@@ -34,7 +34,7 @@ const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 30;                      /////////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 50;                      /////////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 
 function endEvent() {
@@ -1041,7 +1041,7 @@ function spawnDeathEffect(pos) {   /////////////////////////////////////////////
 
 function spawnFish() {
 
-      if (fishes.length >= MAX_FISH) return;  /////////////////////////////주석을 풀면 고기는 10마리로 한정됨.
+      if (fishes.length >= MAX_FISH) return;  /////////////////////////////주석을 풀면 고기는 30마리로 한정됨.
 
     const normalFishCount = fishes.reduce((count, f) => {
     return count + (f.userData?.type === "normal" ? 1 : 0);
@@ -1671,17 +1671,11 @@ function animate() {
    물고기 스폰
 ========================= */
 
-    spawnTimer += delta;
-
+        spawnTimer += delta;
     if (spawnTimer > 2.0) {
-    spawnTimer = 0;
-
-    //////////////////////// 🔥 물고기 개수 제한 추가
-    if (fishes.length < 30) { //////////////////////////////////////////////    ///// 🔥 현재 30마리로 제한
+        spawnTimer = 0;
         spawnFish();
     }
-    }
-
     if (Math.random() < 0.02) {
     spawnFloorBubble();
     }
@@ -1693,7 +1687,7 @@ function animate() {
     shootTimer += delta;
     if (gameMode === "PLAY" && shooting && shootTimer > fireRate) {
         shootTimer = 0;
-        for (let i = 0; i < 4; i++) {      //.......................................총알 증가하는 코드
+        for (let i = 0; i < 4; i++) {      /////////////////////////////////////////////////총알 증가하는 코드
          setTimeout(() => shoot(), i * 50);
       }
     }
@@ -1855,7 +1849,7 @@ function animate() {
     const fish = fishes[j];
 
     const hitRadius =
-        fish.userData.type === "shark" ? 3.0 : 1.8; ////현재 상어는 3.0, 물고기는1.8 쉽게 하려면 수치올리면 됨.
+        fish.userData.type === "shark" ? 3.0 : 2.0; ////현재 상어는 3.0, 물고기는2.0 쉽게 하려면 수치올리면 됨.
 
     const hitRadiusSq = hitRadius * hitRadius;
 
@@ -1868,7 +1862,7 @@ function animate() {
         // 🦈 SHARK
         if (fish.userData.type === "shark") {
 
-            fish.userData.hp -= 1;   ///////////////////////////////////////  상어 총알 타격치 수치
+            fish.userData.hp -= 1;   //////////////////////////////////////////////////  상어 총알 타격치 수치
 
             // ❌ 삭제됨: fish.scale.multiplyScalar(0.999);
 
@@ -1882,7 +1876,7 @@ function animate() {
                 }
 
                     playHit();
-                    addScore(3000); ////////////////////////////////////////  상어 잡으면 주는 보너스
+                    addScore(3000); ///////////////////////////////////////////////////  상어 잡으면 주는 보너스
 
                     if (fish.userData.type === "shark") {
                      sounds.shark_spawn.pause();
@@ -1927,7 +1921,7 @@ function animate() {
                 }
 
                 playHit();
-                addScore(fish.userData.score);   ////////////////////// 거북이 잡으면 주는 보너스. 
+                addScore(fish.userData.score);   ////////////////////////////////// 거북이 잡으면 주는 보너스. 
                 if (fish.userData.type === "turtle") {
                     sounds.turtle_theme.pause();
                     sounds.turtle_theme.currentTime = 0;
@@ -1971,7 +1965,7 @@ function animate() {
         g.children.forEach(p => {
 
             p.position.add(p.userData.velocity);
-            p.userData.velocity.y -= 0.0;  // 총알 발사될 때 물방울이 나오는 것
+            p.userData.velocity.y -= 0.0;  //////////////////////////////// 총알 발사될 때 물방울이 나오는 것
             p.material.opacity -= 0.03;
 
             if (p.material.opacity > 0) alive = true;
