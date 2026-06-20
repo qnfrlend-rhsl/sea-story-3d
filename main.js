@@ -34,7 +34,7 @@ const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 25;                      //////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 30;                      //////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 
 function endEvent() {
@@ -1530,15 +1530,15 @@ const dir = target.clone()
     .normalize();
 
     const spread = new THREE.Vector3(
-        (Math.random() - 0.5) * 0.02,   //  0.02 일반기관총, 0.10 산탄총,
+        (Math.random() - 0.5) * 0.02,   ////////////////////////////////////  0.02 일반기관총, 0.10 산탄총,
         (Math.random() - 0.5) * 0.02,
         (Math.random() - 0.5) * 0.02
     );
 
     dir.add(spread).normalize();
 
-    bullet.userData.velocity = dir.multiplyScalar(2.0);  // 총알 속도
-    bullet.userData.life = 2.5;
+    bullet.userData.velocity = dir.multiplyScalar(3.0);  /////////////////////////////////////// 총알 속도
+    bullet.userData.life = 4.0;/////////////////////////총알 사거리(2.5면 일반사거리임, 현재 4.0이면 멀리나감)
 
     bullets.push(bullet);
     scene.add(bullet);
@@ -1573,7 +1573,7 @@ function spawnMuzzleBubbles(pos) {
     for (let i = 0; i < 20; i++) {
 
         const bubble = new THREE.Mesh(
-            new THREE.SphereGeometry(0.05, 6, 6),   //  총구에서 나오는 기포 효과
+            new THREE.SphereGeometry(0.05, 6, 6),   /////////////////////////  총구에서 나오는 기포 효과
             new THREE.MeshBasicMaterial({
                 color: 0xffffff,
                 transparent: true,
