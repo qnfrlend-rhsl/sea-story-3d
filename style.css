@@ -359,7 +359,7 @@ body{
 
 #topNotice{
     position:absolute;
-    top:0px;                                                  /* 🔥 게임 상단에 이벤트 위치 */
+    top:30px;                                                  /* 🔥 게임 상단에 이벤트 위치 */
     left:50%;
     transform:translateX(-50%);
 
