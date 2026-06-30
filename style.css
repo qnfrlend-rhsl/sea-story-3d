@@ -63,7 +63,7 @@ body{
     background: linear-gradient(
         to bottom,
         #001624,                                                       /* 슬롯 바탕 색상*/
-        #023f68
+        #050505
     );
 
     border-top:3px solid #012136;                                      /* 슬롯과 게임사이 색상*/

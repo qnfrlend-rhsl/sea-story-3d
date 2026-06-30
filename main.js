@@ -413,21 +413,21 @@ function onColumnStopped() {
 
 if (win === "JACKPOT") {
 
-    addScore(10000);
+    addScore(100000);
     playSfx(sounds.jackpot_win, 2.0);
     showBonusEvent("🐋 JACKPOT!", "34px");
 }
 
 else if (win === "BIGWIN") {
 
-    addScore(500);
+    addScore(1000);
     playSfx(sounds.big_win, 2.0);
     showBonusEvent("💰 BIG WIN!", "26px");
 }
 
 else if (win === "SMALLWIN") {
 
-    addScore(100);
+    addScore(300);
     playSfx(sounds.small_win, 2.0);
     showBonusEvent("🔥 SMALL WIN!", "22px");
 }
@@ -751,17 +751,22 @@ const FISH_MODELS = [
     // ======================
     // 🐟 일반 물고기
     // ======================
-    { url: "./models/fish.glb", weight: 40, speed: 0.02, turnSpeed: 0.2, scale: 0.05, hp: 1, score: 10, type: "normal" },
-    { url: "./models/fish2.glb", weight: 50, speed: 0.050, turnSpeed: 0.08, scale: 0.20, hp: 3, score: 30, type: "normal" },
-    { url: "./models/fish3.glb", weight: 5, speed: 0.050, turnSpeed: 0.03, scale: 0.05, hp: 5, score: 30, type: "normal" },
-    { url: "./models/fish4.glb", weight: 3, speed: 0.025, turnSpeed: 0.03, scale: 0.3, hp: 10, score: 30, type: "normal" },
+    //{ url: "./models/fish.glb", weight: 20, speed: 0.02, turnSpeed: 0.2, scale: 0.05, hp: 1, score: 10, type: "normal" },
+    { url: "./models/fish2.glb", weight: 25, speed: 0.050, turnSpeed: 0.08, scale: 0.20, hp: 50, score: 15, type: "normal" },
+    { url: "./models/fish3.glb", weight: 10, speed: 0.050, turnSpeed: 0.03, scale: 0.05, hp: 10, score: 10, type: "normal" },
+    { url: "./models/fish4.glb", weight: 10, speed: 0.025, turnSpeed: 0.03, scale: 0.3, hp: 10, score: 10, type: "normal" },
+    { url: "./models/fish5.glb", weight: 15, speed: 0.050, turnSpeed: 0.08, scale: 0.50, hp: 50, score: 15, type: "normal" },
+    { url: "./models/fish6.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.20, hp: 50, score: 15, type: "normal" },
+    { url: "./models/fish7.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.30, hp: 10, score: 10, type: "normal" },
+    { url: "./models/fish8.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.03, hp: 10, score: 10, type: "normal" }, 
+    //{ url: "./models/fish9.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.90, hp: 150, score: 50, type: "normal" },
 
     // ======================
     // 🦈🐋🐢 이벤트 물고기 (통합됨)
     // ======================
-    { url: "./models/turtle.glb", weight: 0.2, speed: 0.05, turnSpeed: 0.03, scale: 0.010, hp: 50, score: 1000, spawnBonus: 500, type: "turtle" },
+    { url: "./models/turtle.glb", weight: 0.2, speed: 0.05, turnSpeed: 0.03, scale: 0.010, hp: 150, score: 1000, spawnBonus: 500, type: "turtle" },
     { url: "./models/shark.glb", weight: 0.1, speed: 0.08, turnSpeed: 0.03, scale: 1.6, hp: 450, score: 3000, spawnBonus: 500, type: "shark" },
-    { url: "./models/whale.glb", weight: 0.05, speed: 0.02, turnSpeed: 0.03, scale: 0.08, hp: 999, score: 10000, spawnBonus: 10000, type: "whale" }
+    { url: "./models/whale.glb", weight: 0.01, speed: 0.02, turnSpeed: 0.03, scale: 0.08, hp: 999, score: 10000, spawnBonus: 10000, type: "whale" }
 ];
 
 const fishes = [];
