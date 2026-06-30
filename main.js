@@ -2069,10 +2069,10 @@ window.addEventListener("DOMContentLoaded", () => {
 startNoticeCycle();
 
 const bottomNotices = [
-  "🎯 현재 보너스 이벤트 진행 중",
-  "💰 점수 누적 시 추가 보상 지급",
+  "🎯 100만 SCORE 달성 시 대박선물 증정!",
+  "💰 보너스 타임 진행 중!",
   "🐋 대형 이벤트 등장 확률 상승",
-  "🔥 연속 히트 시 보너스 증가"
+  "🔥 매일 이벤트 진행중!"
 ];
 
 const bottomEl = document.getElementById("bottomNotice");
