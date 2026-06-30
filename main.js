@@ -34,7 +34,7 @@ const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 50;                      /////////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 60;                      /////////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 
 function endEvent() {
@@ -1887,7 +1887,7 @@ function animate() {
                      sounds.shark_spawn.pause();
                      sounds.shark_spawn.currentTime = 0;
 
-                     endEvent();
+                     //endEvent();
                     }
 
                 // sharkDie();
@@ -1930,19 +1930,19 @@ function animate() {
                 if (fish.userData.type === "turtle") {
                     sounds.turtle_theme.pause();
                     sounds.turtle_theme.currentTime = 0;
-                    endEvent();
+                    //endEvent();
                 }
                 
                 if (fish.userData.type === "shark") {
                     sounds.shark_spawn.pause();
                     sounds.shark_spawn.currentTime = 0;
-                    endEvent();
+                    //endEvent();
                 }
                 
                 if (fish.userData.type === "whale") {
                     sounds.whale_theme.pause();
                     sounds.whale_theme.currentTime = 0;
-                    endEvent();
+                    //endEvent();
                 }
 
                 scene.remove(fish);
