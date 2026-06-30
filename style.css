@@ -359,7 +359,7 @@ body{
 
 #topNotice{
     position:absolute;
-    top:40px;                                                  /* 🔥 게임 상단에 이벤트 위치 */
+    top:50px;                                                  /* 🔥 게임 상단에 이벤트 위치 */
     left:50%;
     transform:translateX(-50%);
 
@@ -403,11 +403,11 @@ body{
         filter:brightness(1);
     }
     50%{
-        color:#f7be02;
+        color:#ffbc02;
         filter:brightness(2);
     }
     100%{
-        color:#fce14c;
+        color:#fdd700;
         filter:brightness(1);
     }
 }
