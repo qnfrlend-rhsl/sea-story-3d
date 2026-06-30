@@ -359,13 +359,13 @@ body{
 
 #topNotice{
     position:absolute;
-    top:70px;
+    top:60px;                                                  /* 🔥 게임 상단에 이벤트 위치 */
     left:50%;
     transform:translateX(-50%);
 
     z-index:99999;
 
-    font-size:24px;
+    font-size:20px;
     font-weight:900;
 
     color:#ffd700;
@@ -465,7 +465,7 @@ body{
 
 #bottomNotice{
     position:absolute;
-    bottom:500px;
+    bottom:300px;                                  /* 🔥 하단 이벤트 위치 */
 
     left:50%;
     transform:translateX(-50%);
