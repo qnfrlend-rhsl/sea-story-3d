@@ -403,11 +403,11 @@ body{
         filter:brightness(1);
     }
     50%{
-        color:#ec3b0e;
+        color:#f1ce5a;
         filter:brightness(2);
     }
     100%{
-        color:#ffd700;
+        color:#fce773;
         filter:brightness(1);
     }
 }
