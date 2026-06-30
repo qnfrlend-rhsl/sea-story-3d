@@ -756,7 +756,7 @@ const FISH_MODELS = [
     { url: "./models/fish3.glb", weight: 10, speed: 0.050, turnSpeed: 0.03, scale: 0.05, hp: 10, score: 10, type: "normal" },
     { url: "./models/fish4.glb", weight: 10, speed: 0.025, turnSpeed: 0.03, scale: 0.3, hp: 10, score: 10, type: "normal" },
     { url: "./models/fish5.glb", weight: 15, speed: 0.050, turnSpeed: 0.08, scale: 0.50, hp: 50, score: 15, type: "normal" },
-    { url: "./models/fish6.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.20, hp: 50, score: 15, type: "normal" },
+    { url: "./models/fish6.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.15, hp: 50, score: 15, type: "normal" },
     { url: "./models/fish7.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.30, hp: 10, score: 10, type: "normal" },
     { url: "./models/fish8.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.03, hp: 10, score: 10, type: "normal" }, 
     //{ url: "./models/fish9.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.90, hp: 150, score: 50, type: "normal" },
