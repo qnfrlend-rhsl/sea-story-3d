@@ -2099,7 +2099,7 @@ function runTicker() {
 
     i = (i + 1) % bottomNotices.length;
 
-    setTimeout(runTicker, 9000);
+    setTimeout(runTicker, 10100);
 }
 
 runTicker();
