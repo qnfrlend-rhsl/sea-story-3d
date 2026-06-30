@@ -465,7 +465,7 @@ body{
 
 #bottomNotice{
     position:absolute;
-    bottom:400px;                                                   /* 🔥 하단 이벤트 위치 */
+    bottom:380px;                                                   /* 🔥 하단 이벤트 위치 */
 
     left:50%;
     transform:translateX(-50%);
