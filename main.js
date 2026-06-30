@@ -2083,17 +2083,23 @@ function runTicker() {
 
     bottomEl.textContent = bottomNotices[i];
 
+    const width = bottomEl.offsetWidth;
+
     bottomEl.style.transition = "none";
-    bottomEl.style.transform = "translateX(100%)";
+
+    // 👉 화면 오른쪽 밖 시작
+    bottomEl.style.transform = `translateX(${width}px)`;
 
     void bottomEl.offsetWidth;
 
     bottomEl.style.transition = "transform 10s linear";
-    bottomEl.style.transform = "translateX(-100%)";
+
+    // 👉 화면 왼쪽 밖 끝
+    bottomEl.style.transform = `translateX(-${width}px)`;
 
     i = (i + 1) % bottomNotices.length;
 
-    setTimeout(runTicker, 11000);
+    setTimeout(runTicker, 10500);
 }
 
 runTicker();
