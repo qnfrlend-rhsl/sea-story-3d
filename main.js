@@ -2069,7 +2069,7 @@ window.addEventListener("DOMContentLoaded", () => {
 startNoticeCycle();
 
 const bottomNotices = [
-  "🎯 100만 SCORE 달성 시 대박선물 증정!",
+  "🎯 100만 SCORE 달성 시 업비트 자동프로그램 증정!",
   "💰 보너스 타임 진행 중!",
   "🐋 대형 이벤트 등장 확률 상승!",
   "🔥 매일 이벤트 진행중!"
