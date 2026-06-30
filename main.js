@@ -755,7 +755,7 @@ const FISH_MODELS = [
     { url: "./models/fish2.glb", weight: 25, speed: 0.050, turnSpeed: 0.08, scale: 0.20, hp: 50, score: 15, type: "normal" },
     { url: "./models/fish3.glb", weight: 10, speed: 0.050, turnSpeed: 0.03, scale: 0.05, hp: 10, score: 10, type: "normal" },
     { url: "./models/fish4.glb", weight: 10, speed: 0.025, turnSpeed: 0.03, scale: 0.3, hp: 10, score: 10, type: "normal" },
-    { url: "./models/fish5.glb", weight: 15, speed: 0.050, turnSpeed: 0.08, scale: 0.50, hp: 50, score: 15, type: "normal" },
+    { url: "./models/fish5.glb", weight: 15, speed: 0.050, turnSpeed: 0.08, scale: 0.35, hp: 50, score: 15, type: "normal" },
     { url: "./models/fish6.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.15, hp: 50, score: 15, type: "normal" },
     { url: "./models/fish7.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.30, hp: 10, score: 10, type: "normal" },
     { url: "./models/fish8.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.03, hp: 10, score: 10, type: "normal" }, 
@@ -2029,6 +2029,75 @@ function animate() {
 
     animate();
 
+    function startNoticeCycle() {
+
+    const notices = [
+        "✨100만 SCORE 달성 시 대박선물 증정!✨",
+        "✨보너스 타임 진행 중!✨",
+        "✨매일 이벤트 진행중!✨",
+        "✨대형 이벤트 준비 완료!✨"
+    ];
+
+    let index = 0;
+    const banner = document.getElementById("topNotice");
+
+    function cycle() {
+
+        banner.textContent = notices[index];
+        banner.style.display = "block";
+
+        setTimeout(() => {
+
+            banner.style.display = "none";
+
+            index = (index + 1) % notices.length;
+
+            setTimeout(() => {
+                cycle();
+            }, 60000); // 1분30초 대기
+
+        }, 20000); // 20초 표시
+    }
+
+    setTimeout(() => {
+        cycle();
+    }, 3000); // 시작 지연
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    
+startNoticeCycle();
+
+const bottomNotices = [
+  "🎯 현재 보너스 이벤트 진행 중",
+  "💰 점수 누적 시 추가 보상 지급",
+  "🐋 대형 이벤트 등장 확률 상승",
+  "🔥 연속 히트 시 보너스 증가"
+];
+
+const bottomEl = document.getElementById("bottomNotice");
+
+let i = 0;
+
+function runTicker() {
+
+    bottomEl.textContent = bottomNotices[i];
+
+    bottomEl.style.transition = "none";
+    bottomEl.style.transform = "translateX(100%)";
+
+    void bottomEl.offsetWidth;
+
+    bottomEl.style.transition = "transform 10s linear";
+    bottomEl.style.transform = "translateX(-100%)";
+
+    i = (i + 1) % bottomNotices.length;
+
+    setTimeout(runTicker, 11000);
+}
+
+runTicker();
+})
     /* resize */
     window.addEventListener("resize", () => {
 

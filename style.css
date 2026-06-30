@@ -357,3 +357,127 @@ body{
     text-shadow: 0 0 10px rgba(255,79,216,0.6);
 }
 
+#topNotice{
+    position:absolute;
+    top:70px;
+    left:50%;
+    transform:translateX(-50%);
+
+    z-index:99999;
+
+    font-size:24px;
+    font-weight:900;
+
+    color:#ffd700;
+
+    text-shadow:
+        0 0 10px #fff,
+        0 0 20px #ff0,
+        0 0 40px rgb(248, 203, 3),
+        0 0 80px rgb(255, 55, 55);
+
+    white-space:nowrap;
+
+    animation:
+        topNoticeFlash 0.6s infinite,
+        topNoticeShake 0.6s infinite,
+        topNoticeZoom 0.8s infinite,
+        topNoticeGlow 1.6s ease-in-out infinite;
+}
+
+/* 슬라이드 모드 */
+#topNotice.slide{
+    animation:none !important;
+    text-shadow:
+        0 0 10px #fff,
+        0 0 20px #ff0,
+        0 0 40px orange;
+
+    overflow:hidden;
+}
+
+/* 깜빡임 */
+@keyframes topNoticeFlash{
+    0%{
+        color:#f3ebc0;
+        filter:brightness(1);
+    }
+    50%{
+        color:#f57105;
+        filter:brightness(2);
+    }
+    100%{
+        color:#ffd700;
+        filter:brightness(1);
+    }
+}
+
+/* 확대 (충돌 방지: translateX 제거) */
+@keyframes topNoticeZoom{
+    0%{
+        transform:translateX(-50%) scale(1);
+    }
+    50%{
+        transform:translateX(-50%) scale(1.2);
+    }
+    100%{
+        transform:translateX(-50%) scale(1);
+    }
+}
+
+/* 흔들림 (margin-left → transform 기반으로 안정화) */
+@keyframes topNoticeShake{
+    0%{
+        transform:translateX(-50%);
+    }
+    25%{
+        transform:translateX(calc(-50% - 2px));
+    }
+    50%{
+        transform:translateX(calc(-50% + 2px));
+    }
+    75%{
+        transform:translateX(calc(-50% - 2px));
+    }
+    100%{
+        transform:translateX(-50%);
+    }
+}
+
+/* 은은한 네온 호흡 */
+@keyframes topNoticeGlow{
+    0% {
+        text-shadow:
+            0 0 8px #fff,
+            0 0 15px #ffd700;
+    }
+    50% {
+        text-shadow:
+            0 0 15px #fff,
+            0 0 30px orange;
+    }
+    100% {
+        text-shadow:
+            0 0 8px #fff,
+            0 0 15px #ffd700;
+    }
+}
+
+#bottomNotice{
+    position:absolute;
+    bottom:500px;
+
+    left:50%;
+    transform:translateX(-50%);
+
+    width:90%;   /* 핵심 */
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    color:#fff;
+    font-size:18px;
+    font-weight:700;
+
+    z-index:99999;
+}
