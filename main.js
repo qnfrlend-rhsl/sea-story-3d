@@ -232,8 +232,8 @@ const scene = new THREE.Scene();
 
 const SLOT_CONFIG = {
     jackpot: 0.1,
-    bigWin: 2.9,
-    smallWin: 7,
+    bigWin: 3,
+    smallWin: 6.9,
 };
 
 // =========================
