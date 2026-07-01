@@ -231,9 +231,9 @@ const scene = new THREE.Scene();
 
 
 const SLOT_CONFIG = {
-    jackpot: 0.5,
-    bigWin: 5,
-    smallWin: 15,
+    jackpot: 0.1,
+    bigWin: 2.9,
+    smallWin: 7,
 };
 
 // =========================
@@ -435,7 +435,7 @@ else if (win === "SMALLWIN") {
     slotRunning = false;
     gameMode = "PLAY";
 
-}, 500);
+}, 500);    /////////////////////////////////////////////////  0.5초 딜레이
     }
     }
 
@@ -493,7 +493,7 @@ function spinSlot() {
     if (spinCount <= 0) return;
 
     spinCount--;
-    score -= 100;
+    score -= 1000;///////////////////////////////////////////////////         ////// 슬롯 돌리는 금액
     updateUI();
 
     currentSlotSound = sounds.slot_spin.cloneNode();
