@@ -493,7 +493,7 @@ function spinSlot() {
     if (spinCount <= 0) return;
 
     spinCount--;
-    score -= 500;///////////////////////////////////////////////////////////////// 슬롯 돌리는 금액
+    score -= 200;///////////////////////////////////////////////////////////////// 슬롯 돌리는 금액
     updateUI();
 
     currentSlotSound = sounds.slot_spin.cloneNode();
