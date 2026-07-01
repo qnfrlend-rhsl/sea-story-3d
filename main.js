@@ -34,7 +34,7 @@ const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 60;                      /////////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 70;///////////////////////////////////////////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 
 function endEvent() {
@@ -785,7 +785,7 @@ const floorBubbles = [];
 function spawnFloorBubble() {
 
     const bubble = new THREE.Mesh(
-        new THREE.SphereGeometry(0.05 + Math.random() * 0.25, 6, 6),   ///////////////////// 기포 크기 조절
+        new THREE.SphereGeometry(0.05 + Math.random() * 0.25, 6, 6),   //////////////////////////// 기포 크기 조절
         new THREE.MeshBasicMaterial({
             color: 0x4f8fb3,
             transparent: true,
@@ -988,7 +988,7 @@ function spawnHitEffect(pos) {
         const isBlood = i < BLOOD_COUNT;
 
         const mat = new THREE.MeshBasicMaterial({
-            color: isBlood ? 0xcc0000 : 0xcc0000,  /////////////////////////////////// 죽을 때 나오는 피방울
+            color: isBlood ? 0xcc0000 : 0xcc0000,  ///////////////////////////////////////////// 죽을 때 나오는 피방울
             transparent: true,
             opacity: 1
         });
@@ -1009,7 +1009,7 @@ function spawnHitEffect(pos) {
     effects.push(group);
 }
 
-function spawnDeathEffect(pos) {   ////////////////////////////////////////////////////  핏방울 퍼지는 코드
+function spawnDeathEffect(pos) {   ////////////////////////////////////////////////////////////////  핏방울 퍼지는 코드
 
     const group = new THREE.Group();
     const geo = new THREE.SphereGeometry(0.15, 6, 6);
@@ -1046,7 +1046,7 @@ function spawnDeathEffect(pos) {   /////////////////////////////////////////////
 
 function spawnFish() {
 
-      if (fishes.length >= MAX_FISH) return;  /////////////////////////////주석을 풀면 고기는 30마리로 한정됨.
+      if (fishes.length >= MAX_FISH) return;  //////////////////////////////////////////주석을 풀면 고기는 30마리로 한정됨.
 
     const normalFishCount = fishes.reduce((count, f) => {
     return count + (f.userData?.type === "normal" ? 1 : 0);
