@@ -356,10 +356,10 @@ body{
 
     text-shadow: 0 0 10px rgba(255,79,216,0.6);
 }
-
+/*/////////////////////////////////////////////////////////////////////////////////// 🔥 게임 상단에 이벤트 변경 시작 */
 #topNotice{
     position:absolute;
-    top:50px;                                                  /* 🔥 게임 상단에 이벤트 위치 */
+    top:50px;
     left:50%;
     transform:translateX(-50%);
 
@@ -407,7 +407,7 @@ body{
         filter:brightness(2);
     }
     100%{
-        color:#fdd700;
+        color:#fdad00;
         filter:brightness(1);
     }
 }
@@ -462,7 +462,9 @@ body{
             0 0 15px #ffd700;
     }
 }
+                                                                                 /* 🔥 게임 상단에 이벤트 변경 끝 */
 
+/*/////////////////////////////////////////////////////////////////////////////  여기부터 뉴스 슬라이드 글 변경 시작    */
 #bottomNotice {
     position:absolute;
     bottom:350px;
@@ -487,12 +489,13 @@ body{
     100% { transform: translateX(-50%); }
 }
 .hot {
-    color: rgb(247, 247, 4);
+    color: rgb(252, 206, 82);
     font-weight: 900;
-    text-shadow: 0 0 10px gold;
+    text-shadow: 0 0 10px rgb(248, 162, 3);
 }
 
 .event {
     color: #00d9ff;
     font-weight: bold;
 }
+                                                                          /*    여기부터 뉴스 슬라이드 글 변경 끝    */

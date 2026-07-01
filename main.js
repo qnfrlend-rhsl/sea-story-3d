@@ -420,14 +420,14 @@ if (win === "JACKPOT") {
 
 else if (win === "BIGWIN") {
 
-    addScore(1000);
+    addScore(3000);
     playSfx(sounds.big_win, 2.0);
     showBonusEvent("💰 BIG WIN!", "26px");
 }
 
 else if (win === "SMALLWIN") {
 
-    addScore(300);
+    addScore(1000);
     playSfx(sounds.small_win, 2.0);
     showBonusEvent("🔥 SMALL WIN!", "22px");
 }
@@ -752,13 +752,13 @@ const FISH_MODELS = [
     // 🐟 일반 물고기
     // ======================
     //{ url: "./models/fish.glb", weight: 20, speed: 0.02, turnSpeed: 0.2, scale: 0.05, hp: 1, score: 10, type: "normal" },
-    { url: "./models/fish2.glb", weight: 25, speed: 0.050, turnSpeed: 0.08, scale: 0.20, hp: 50, score: 15, type: "normal" },
-    { url: "./models/fish3.glb", weight: 10, speed: 0.050, turnSpeed: 0.03, scale: 0.05, hp: 10, score: 10, type: "normal" },
-    { url: "./models/fish4.glb", weight: 10, speed: 0.025, turnSpeed: 0.03, scale: 0.3, hp: 10, score: 10, type: "normal" },
-    { url: "./models/fish5.glb", weight: 15, speed: 0.050, turnSpeed: 0.08, scale: 0.35, hp: 50, score: 15, type: "normal" },
-    { url: "./models/fish6.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.15, hp: 50, score: 15, type: "normal" },
-    { url: "./models/fish7.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.30, hp: 10, score: 10, type: "normal" },
-    { url: "./models/fish8.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.03, hp: 10, score: 10, type: "normal" }, 
+    { url: "./models/fish2.glb", weight: 25, speed: 0.050, turnSpeed: 0.08, scale: 0.20, hp: 15, score: 10, type: "normal" },
+    { url: "./models/fish3.glb", weight: 10, speed: 0.050, turnSpeed: 0.03, scale: 0.05, hp: 5, score: 5, type: "normal" },
+    { url: "./models/fish4.glb", weight: 10, speed: 0.025, turnSpeed: 0.03, scale: 0.3, hp: 5, score: 5, type: "normal" },
+    { url: "./models/fish5.glb", weight: 15, speed: 0.050, turnSpeed: 0.08, scale: 0.35, hp: 15, score: 10, type: "normal" },
+    { url: "./models/fish6.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.15, hp: 15, score: 10, type: "normal" },
+    { url: "./models/fish7.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.30, hp: 5, score: 5, type: "normal" },
+    { url: "./models/fish8.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.03, hp: 5, score: 5, type: "normal" }, 
     //{ url: "./models/fish9.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.90, hp: 150, score: 50, type: "normal" },
 
     // ======================
@@ -1161,11 +1161,11 @@ function startTurtleEvent() {
 
     const turtle = spawnSpecialFish(TURTLE);
 
-    addScore(500);
+    addScore(500);////////////////////////////////////////////////////////////////  거북이 출현하면 기본적으로 주는 보너스
     showBonusEvent("🐢 TURTLE BONUS!", "20px");
 
 /*
-//////////////////////////////////////////////////////////////////// 여기부터 시간 안에 못 잡으면 사라지는 코드
+////////////////////////////////////////////////////////////////////////////// 여기부터 시간 안에 못 잡으면 사라지는 코드
     setTimeout(() => {
     if (currentEvent === "TURTLE") {
 
@@ -1183,7 +1183,7 @@ function startTurtleEvent() {
         });
        }
      }, 30000);                     ////////////////////////////////3000  (현재 30초)
-     ///////////////////////////////////////////////////////////////  여기까지 시간 안에 잡지못하면 사라짐 코드
+     /////////////////////////////////////////////////////////////////////////  여기까지 시간 안에 잡지못하면 사라짐 코드
 */
     }
 /* =========================
@@ -1204,7 +1204,7 @@ function startSharkEvent() {
 
     spawnSpecialFish(SHARK);
 
-    addScore(500);     //////////////////////////////////////////////////////////// 상어 등장하면 주는 보너스.
+    addScore(500);///////////////////////////////////////////////////////////////  상어 출현하면 기본적으로 주는 보너스
     showBonusEvent("🦈 SHARK HUNT!", "20px");
 
 /*
@@ -1254,7 +1254,7 @@ function startWhaleEvent() {
 
     setTimeout(() => {
         endWhaleEvent();
-    }, 30000);
+    }, 30000);////////////////////////////////////////////////////////////////////////  고래 출현하면 기본적으로 주는 보너스
 }
 
 function endWhaleEvent() {
@@ -1339,7 +1339,7 @@ setNewTarget(fish);
    GUN + AIM + SHOOT
 ========================= */
 
-const cannonBase = new THREE.Group();   /////////////////////////////////////// 화면에서 보이이는 대포의 위치
+const cannonBase = new THREE.Group();   //////////////////////////////////////////////////// 화면에서 보이이는 대포의 위치
 
 cannonBase.position.set(
     0,
@@ -1377,7 +1377,7 @@ cannonBarrel.position.y = 0.5;
 
 cannonBase.add(cannonBarrel);
 
-const muzzle = new THREE.Object3D();   ////////////////////////////////////////  충구에서 나오는 물방울 거리
+const muzzle = new THREE.Object3D();   /////////////////////////////////////////////////////  충구에서 나오는 물방울 거리
 
 muzzle.position.set(
     0.9,
@@ -1535,15 +1535,15 @@ const dir = target.clone()
     .normalize();
 
     const spread = new THREE.Vector3(
-        (Math.random() - 0.5) * 0.02,   ////////////////////////////////////  0.02 일반기관총, 0.10 산탄총,
+        (Math.random() - 0.5) * 0.02,   //////////////////////////////////////////////////  0.02 일반기관총, 0.10 산탄총,
         (Math.random() - 0.5) * 0.02,
         (Math.random() - 0.5) * 0.02
     );
 
     dir.add(spread).normalize();
 
-    bullet.userData.velocity = dir.multiplyScalar(3.0);  /////////////////////////////////////// 총알 속도
-    bullet.userData.life = 4.0;/////////////////////////총알 사거리(2.5면 일반사거리임, 현재 4.0이면 멀리나감)
+    bullet.userData.velocity = dir.multiplyScalar(3.0);  ////////////////////////////////////////////////////// 총알 속도
+    bullet.userData.life = 4.0;////////////////////////////////////////총알 사거리(2.5면 일반사거리임, 현재 4.0이면 멀리나감)
 
     bullets.push(bullet);
     scene.add(bullet);
@@ -1578,7 +1578,7 @@ function spawnMuzzleBubbles(pos) {
     for (let i = 0; i < 20; i++) {
 
         const bubble = new THREE.Mesh(
-            new THREE.SphereGeometry(0.05, 6, 6),   //////////////////////////////  총구에서 나오는 기포 효과
+            new THREE.SphereGeometry(0.05, 6, 6),   /////////////////////////////////////////  총구에서 나오는 기포 효과
             new THREE.MeshBasicMaterial({
                 color: 0xffffff,
                 transparent: true,
@@ -1601,7 +1601,7 @@ function spawnMuzzleBubbles(pos) {
     effects.push(group);
 }
 
-function showBonusEvent(text, size = "24px") {/////////////////////////////////  이벤트 문구 기본텍스트 크기
+function showBonusEvent(text, size = "24px") {//////////////////////////////////////////////  이벤트 문구 기본텍스트 크기
 
     const fireBtn = document.getElementById("fireBtn");
     const box = document.getElementById("bonusEvent");
@@ -1626,15 +1626,15 @@ function animate() {
     requestAnimationFrame(animate);
 
     const delta = clock.getDelta();
-     ////////////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
+     ///////////////////////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
     
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && eventCooldown > 60){ /////////////////////////////////////////  60은 1분, 300은 5분
+    if (!currentEvent && eventCooldown > 60){ ////////////////////////////////////////////////////  60은 1분, 300은 5분
 
     const r = Math.random();
-    if (r < 0.5) {                ///////////////////////////////////////// 전체 이벤트 확률 0.5는 50%를 뜻함.
+    if (r < 0.5) {                //////////////////////////////////////////////////// 전체 이벤트 확률 0.5는 50%를 뜻함.
         const rr = Math.random();
 
 
@@ -1645,7 +1645,7 @@ function animate() {
 
     eventCooldown = 0;
    }
-    /////////////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
+    ////////////////////////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
 
     mixers.forEach(m => m.update(delta));
 
@@ -1659,7 +1659,7 @@ function animate() {
     });
     scene.children.forEach(obj => {
     if (obj.isAmbientLight) {
-        obj.intensity = 1.5 + Math.sin(Date.now() * 0.0001) * 0.3; ///전체 화면을 어두웠다가 밝아지는 느낌주는 코드
+        obj.intensity = 1.5 + Math.sin(Date.now() * 0.0001) * 0.3; /////////전체 화면을 어두웠다가 밝아지는 느낌주는 코드
     }
 });
 /* =========================
@@ -1692,7 +1692,7 @@ function animate() {
     shootTimer += delta;
     if (gameMode === "PLAY" && shooting && shootTimer > fireRate) {
         shootTimer = 0;
-        for (let i = 0; i < 4; i++) {      /////////////////////////////////////////////////총알 증가하는 코드
+        for (let i = 0; i < 4; i++) {      /////////////////////////////////////////////////////////총알 증가하는 코드
          setTimeout(() => shoot(), i * 50);
       }
     }
@@ -1881,7 +1881,7 @@ function animate() {
                 }
 
                     playHit();
-                    addScore(3000); ///////////////////////////////////////////////////  상어 잡으면 주는 보너스
+                    addScore(3000); /////////////////////////////////////////////////////////  상어 잡으면 주는 보너스
 
                     if (fish.userData.type === "shark") {
                      sounds.shark_spawn.pause();
@@ -1891,6 +1891,7 @@ function animate() {
                     }
 
                 // sharkDie();
+                
 
                 scene.remove(fish);
 
@@ -1906,7 +1907,6 @@ function animate() {
                 });
             }
         }
-
 
 
         // 🐟 NORMAL + EVENT
@@ -1926,7 +1926,7 @@ function animate() {
                 }
 
                 playHit();
-                addScore(fish.userData.score);   ////////////////////////////////// 거북이 잡으면 주는 보너스. 
+                addScore(fish.userData.score);   ///////////////////////////////////////////// 거북이 잡으면 주는 보너스. 
                 if (fish.userData.type === "turtle") {
                     sounds.turtle_theme.pause();
                     sounds.turtle_theme.currentTime = 0;
@@ -1970,7 +1970,7 @@ function animate() {
         g.children.forEach(p => {
 
             p.position.add(p.userData.velocity);
-            p.userData.velocity.y -= 0.0;  //////////////////////////////// 총알 발사될 때 물방울이 나오는 것
+            p.userData.velocity.y -= 0.0;  ////////////////////////////////////////// 총알 발사될 때 물방울이 나오는 것
             p.material.opacity -= 0.03;
 
             if (p.material.opacity > 0) alive = true;
