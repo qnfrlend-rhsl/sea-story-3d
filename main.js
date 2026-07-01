@@ -2032,7 +2032,7 @@ function animate() {
     function startNoticeCycle() {
 
     const notices = [
-        "✨100만 SCORE 달성 시 대박선물 증정!✨",
+        "✨SCORE 100만 달성 시 대박선물!✨",
         "✨보너스 타임 진행 중!✨",
         "✨매일 이벤트 진행중!✨",
         "✨대형 이벤트 준비 완료!✨"
@@ -2078,7 +2078,7 @@ const bottomNotices = [
 const bottomEl = document.getElementById("bottomNotice");
 
 let i = 0;
-
+/*
 function runTicker() {
 
     bottomEl.textContent = bottomNotices[i];
@@ -2101,7 +2101,7 @@ function runTicker() {
 
     setTimeout(runTicker, 9700);
 }
-
+*/
 runTicker();
 })
     /* resize */

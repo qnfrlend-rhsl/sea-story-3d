@@ -463,21 +463,36 @@ body{
     }
 }
 
-#bottomNotice{
+#bottomNotice {
     position:absolute;
-    bottom:350px;                                                   /* 🔥 하단 이벤트 위치 */
-
+    bottom:350px;
     left:50%;
     transform:translateX(-50%);
 
-    width:90%;   /* 핵심 */
+    width:90%;
     overflow:hidden;
-
     white-space:nowrap;
+}
 
-    color:#fff;
-    font-size:18px;
-    font-weight:700;
+.ticker {
+    display:inline-flex;
+    gap:50px;
+    white-space:nowrap;
+    animation: tickerMove 15s linear infinite;
+    color: #ffffff; 
+}
 
-    z-index:99999;
+@keyframes tickerMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+.hot {
+    color: rgb(247, 247, 4);
+    font-weight: 900;
+    text-shadow: 0 0 10px gold;
+}
+
+.event {
+    color: #00d9ff;
+    font-weight: bold;
 }
