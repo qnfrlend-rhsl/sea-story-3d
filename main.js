@@ -2,7 +2,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 import * as SkeletonUtils from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/utils/SkeletonUtils.js";
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbz0O3GsDwrbliqu7S_sPEN7AOIiGTyaGSA64q5xXIHuEb2nZQeKeR4URawwai0XF_MS/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwDSkMpjP_iGR6eCcjRoHkAUP6iMrpjDF3a728_GT4ROCUElAJbQ2ZlNLn5TDJzgFmo/exec";
 
 
 let loadedSeaweedCount = 0;
@@ -2142,30 +2142,39 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-    await fetch(GAS_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({
-            type: "scoreEvent",
-            name,
-            phone,
-            score,
-            time: new Date().toISOString()
-        })
-    });
+        const res = await fetch(GAS_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            body: JSON.stringify({
+                type: "scoreEvent",
+                name,
+                phone: String(phone),
+                score,
+                time: new Date().toISOString()
+            })
+        });
 
-    alert("🎉 신청 완료되었습니다!");
+        const result = await res.json();
 
-    popup.style.display = "none";
+        if (result.status === "ok") {
+            alert("🎉 신청 완료!");
+        } else {
+            alert("⚠️ 저장 실패!");
+        }
 
-    document.getElementById("eventName").value = "";
-    document.getElementById("eventPhone").value = "";
+        popup.style.display = "none";
 
-} catch (err) {
-    console.error(err);
-    alert("서버 오류 발생!");
-}
-    });
+        document.getElementById("eventName").value = "";
+        document.getElementById("eventPhone").value = "";
+
+    } catch (err) {
+        console.error(err);
+        alert("서버 오류 발생!");
+    }
+});
+    
 
     // (ticker는 아직 사용 안 하면 유지만)
     /*
