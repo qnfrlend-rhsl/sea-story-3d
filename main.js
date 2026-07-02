@@ -2142,34 +2142,29 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-        const res = await fetch(GAS_URL, {
-            method: "POST",
-            body: JSON.stringify({
-                type: "scoreEvent",
-                name,
-                phone,
-                score,
-                time: new Date().toISOString()
-            })
-        });
+    await fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({
+            type: "scoreEvent",
+            name,
+            phone,
+            score,
+            time: new Date().toISOString()
+        })
+    });
 
-        const result = await res.text();
+    alert("🎉 신청 완료되었습니다!");
 
-        if (result === "OK") {
-            alert("🎉 신청 완료되었습니다!");
-        } else {
-            alert("⚠️ 저장 실패!");
-        }
+    popup.style.display = "none";
 
-        popup.style.display = "none";
+    document.getElementById("eventName").value = "";
+    document.getElementById("eventPhone").value = "";
 
-        document.getElementById("eventName").value = "";
-        document.getElementById("eventPhone").value = "";
-
-    } catch (err) {
-        console.error(err);
-        alert("서버 오류 발생!");
-    }
+} catch (err) {
+    console.error(err);
+    alert("서버 오류 발생!");
+}
     });
 
     // (ticker는 아직 사용 안 하면 유지만)
