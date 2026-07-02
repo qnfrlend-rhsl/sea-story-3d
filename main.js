@@ -2,6 +2,9 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.m
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 import * as SkeletonUtils from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/utils/SkeletonUtils.js";
 
+const GAS_URL = "https://script.google.com/macros/s/AKfycbz0O3GsDwrbliqu7S_sPEN7AOIiGTyaGSA64q5xXIHuEb2nZQeKeR4URawwai0XF_MS/exec";
+
+
 let loadedSeaweedCount = 0;
 let gameState = "NORMAL";
 let fishReady = false;
@@ -25,6 +28,18 @@ let eventFishAlive = false;
 let turtleVolume = 0.5;
 let sharkVolume = 0.5;
 
+////////////////////////////////////////////////////////////////// 이벤트 달성! 축하와 업데이트할 수 있는 코드
+const scoreEvents = [
+    1000,
+    150000,
+    200000,
+    300000,
+    500000,
+    1000000,
+
+];
+
+const scoreEventTriggered = new Set();
 
 
 
@@ -46,9 +61,24 @@ function endEvent() {
 
 function addScore(value) {
     score += value;
+
+    // 🎉 점수 이벤트 체크
+    for (const eventScore of scoreEvents) {
+
+        if (score >= eventScore && !scoreEventTriggered.has(eventScore)) {
+
+            scoreEventTriggered.add(eventScore);
+
+            showScoreEventPopup(eventScore);
+
+            break;
+        }
+    }
+
     updateSpinCount();   // ⭐ 스핀 자동 갱신
     updateUI();          // ⭐ 화면 갱신
 }
+
 function clampPosition(pos) {
     pos.x = THREE.MathUtils.clamp(pos.x, -BOUNDS.x / 2, BOUNDS.x / 2);
     pos.y = THREE.MathUtils.clamp(pos.y, -3, BOUNDS.y - 3); // 수면/바닥 제한
@@ -1617,7 +1647,22 @@ function showBonusEvent(text, size = "24px") {//////////////////////////////////
         box.style.opacity = "0";
     }, 6000);
 }
+/* =========================
+   🎉 SCORE EVENT POPUP
+========================= */
 
+function showScoreEventPopup(eventScore) {
+
+    const popup = document.getElementById("scoreEventPopup");
+    const message = document.getElementById("eventMessage");
+
+    message.textContent =
+        `${eventScore.toLocaleString()}점 달성!\n이벤트 신청 정보를 입력해주세요.`;
+
+    popup.dataset.score = eventScore;
+
+    popup.style.display = "flex";
+}
 /* =========================
    LOOP
 ========================= */
@@ -1631,10 +1676,10 @@ function animate() {
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && eventCooldown > 30){ //////////// 이벤트 물고기 나오는 시간 코드  60은 1분, 300은 5분
+    if (!currentEvent && eventCooldown > 60){ //////////// 이벤트 물고기 나오는 시간 코드  60은 1분, 300은 5분
 
     const r = Math.random();
-    if (r < 0.95) {                ////////////////////////////// 전체 이벤트 물고기 나올 확률 0.8는 95%를 뜻함.
+    if (r < 0.90) {                //////////////////////////// 전체 이벤트 물고기 나올 확률 0.90는 90%를 뜻함.
         const rr = Math.random();
 
 
@@ -2065,47 +2110,101 @@ function animate() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+
+    startNoticeCycle();
+
+    const bottomNotices = [
+        "🎯 100만 SCORE 달성 시 업비트 자동프로그램 증정!",
+        "💰 보너스 타임 진행 중!",
+        "🐋 대형 이벤트 등장 확률 상승!",
+        "🔥 매일 이벤트 진행중!"
+    ];
+
+    const bottomEl = document.getElementById("bottomNotice");
+
+    let i = 0;
+
+    // =========================
+    // 🎯 이벤트 신청 버튼
+    // =========================
     
-startNoticeCycle();
+    document.getElementById("eventSubmit").addEventListener("click", async () => {
 
-const bottomNotices = [
-  "🎯 100만 SCORE 달성 시 업비트 자동프로그램 증정!",
-  "💰 보너스 타임 진행 중!",
-  "🐋 대형 이벤트 등장 확률 상승!",
-  "🔥 매일 이벤트 진행중!"
-];
+    const popup = document.getElementById("scoreEventPopup");
 
-const bottomEl = document.getElementById("bottomNotice");
+    const name = document.getElementById("eventName").value.trim();
+    const phone = document.getElementById("eventPhone").value.trim();
+    const score = popup.dataset.score;
 
-let i = 0;
-/*
-function runTicker() {
+    if (!name || !phone) {
+        alert("이름과 전화번호를 입력해주세요!");
+        return;
+    }
 
-    bottomEl.textContent = bottomNotices[i];
+    try {
+        const res = await fetch(GAS_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                type: "scoreEvent",
+                name,
+                phone,
+                score,
+                time: new Date().toISOString()
+            })
+        });
 
-    const width = bottomEl.offsetWidth;
+        const result = await res.text();
 
-    bottomEl.style.transition = "none";
+        if (result === "OK") {
+            alert("🎉 신청 완료되었습니다!");
+        } else {
+            alert("⚠️ 저장 실패!");
+        }
 
-    // 👉 화면 오른쪽 밖 시작
-    bottomEl.style.transform = `translateX(${width}px)`;
+        popup.style.display = "none";
 
-    void bottomEl.offsetWidth;
+        document.getElementById("eventName").value = "";
+        document.getElementById("eventPhone").value = "";
 
-    bottomEl.style.transition = "transform 10s linear";
+    } catch (err) {
+        console.error(err);
+        alert("서버 오류 발생!");
+    }
+    });
 
-    // 👉 화면 왼쪽 밖 끝
-    bottomEl.style.transform = `translateX(-${width}px)`;
+    // (ticker는 아직 사용 안 하면 유지만)
+    /*
+    function runTicker() {
 
-    i = (i + 1) % bottomNotices.length;
+        bottomEl.textContent = bottomNotices[i];
 
-    setTimeout(runTicker, 9700);
-}
-*/
-runTicker();
-})
-    /* resize */
-    window.addEventListener("resize", () => {
+        const width = bottomEl.offsetWidth;
+
+        bottomEl.style.transition = "none";
+
+        bottomEl.style.transform = `translateX(${width}px)`;
+
+        void bottomEl.offsetWidth;
+
+        bottomEl.style.transition = "transform 10s linear";
+
+        bottomEl.style.transform = `translateX(-${width}px)`;
+
+        i = (i + 1) % bottomNotices.length;
+
+        setTimeout(runTicker, 9700);
+    }
+
+    runTicker();
+    */
+
+});
+
+
+// =========================
+// resize (유지)
+// =========================
+window.addEventListener("resize", () => {
 
     camera.aspect = oceanArea.clientWidth / oceanArea.clientHeight;
     camera.updateProjectionMatrix();
@@ -2113,4 +2212,3 @@ runTicker();
     renderer.setSize(oceanArea.clientWidth, oceanArea.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 });
-// test
