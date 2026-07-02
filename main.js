@@ -1631,7 +1631,7 @@ function animate() {
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && eventCooldown > 60){ //////////// 이벤트 물고기 나오는 시간 코드  60은 1분, 300은 5분
+    if (!currentEvent && eventCooldown > 30){ //////////// 이벤트 물고기 나오는 시간 코드  60은 1분, 300은 5분
 
     const r = Math.random();
     if (r < 0.9) {                ////////////////////////////// 전체 이벤트 물고기 나올 확률 0.8는 90%를 뜻함.
