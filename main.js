@@ -1,8 +1,7 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 import * as SkeletonUtils from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/utils/SkeletonUtils.js";
-
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwDSkMpjP_iGR6eCcjRoHkAUP6iMrpjDF3a728_GT4ROCUElAJbQ2ZlNLn5TDJzgFmo/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzBmAT-StvOa8X_-7Pk2PwIW8Y-GcYOTfKvAbWCOmXB0K999kP-Gv5vw5I1xqaW9XDb/exec";
 
 
 let loadedSeaweedCount = 0;
@@ -2127,8 +2126,12 @@ window.addEventListener("DOMContentLoaded", () => {
     // =========================
     // 🎯 이벤트 신청 버튼
     // =========================
-    
+    let isSubmitting = false; 
+
     document.getElementById("eventSubmit").addEventListener("click", async () => {
+
+    if (isSubmitting) return;   // 🔥 연타 방지
+    isSubmitting = true;
 
     const popup = document.getElementById("scoreEventPopup");
 
@@ -2138,6 +2141,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (!name || !phone) {
         alert("이름과 전화번호를 입력해주세요!");
+        isSubmitting = false; 
         return;
     }
 
@@ -2150,7 +2154,7 @@ window.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({
                 type: "scoreEvent",
                 name,
-                phone: String(phone),
+                phone: "'" + phone,
                 score,
                 time: new Date().toISOString()
             })
@@ -2173,6 +2177,8 @@ window.addEventListener("DOMContentLoaded", () => {
         console.error(err);
         alert("서버 오류 발생!");
     }
+
+    isSubmitting = false;
 });
     
 
