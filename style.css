@@ -519,14 +519,14 @@ body{
     z-index: 9999;
 }
 
-.score-event-box {
+.score-event-box {    /*//////////////////////////////////////////////////////   이벤트 당첨!~  관련 코드 */
 
     width: 360px;
     max-width: 90%;
 
     background: #ffffff;
 
-    border-radius: 15px;
+    border-radius: 12px;
 
     padding: 25px;
 
@@ -544,7 +544,7 @@ body{
 .score-event-box p{
 
     margin-bottom:20px;
-    font-size:18px;
+    font-size:15px;      /*/////////////////////////////   달성! 이벤트 신청 정보를 입력해주세요. 관련 코드 */
 }
 
 .score-event-box input{
