@@ -30,12 +30,10 @@ let sharkVolume = 0.5;
 ////////////////////////////////////////////////////////////////// 이벤트 달성! 축하와 업데이트할 수 있는 코드
 const scoreEvents = [
     1000,
-    150000,
-    200000,
-    300000,
-    500000,
+    10000,
+    100000,
     1000000,
-
+    
 ];
 
 const scoreEventTriggered = new Set();
@@ -2124,11 +2122,23 @@ window.addEventListener("DOMContentLoaded", () => {
     let i = 0;
 
     // =========================
-    // 🎯 이벤트 신청 버튼
-    // =========================
-    let isSubmitting = false; 
+// 🎯 이벤트 신청 버튼
+// =========================
+let isSubmitting = false;
 
-    document.getElementById("eventSubmit").addEventListener("click", async () => {
+// 팝업 닫기 및 초기화
+function closeEventPopup() {
+
+    const popup = document.getElementById("scoreEventPopup");
+
+    popup.style.display = "none";
+    popup.dataset.score = "";
+
+    document.getElementById("eventName").value = "";
+    document.getElementById("eventPhone").value = "";
+}
+
+document.getElementById("eventSubmit").addEventListener("click", async () => {
 
     if (isSubmitting) return;   // 🔥 연타 방지
     isSubmitting = true;
@@ -2141,11 +2151,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (!name || !phone) {
         alert("이름과 전화번호를 입력해주세요!");
-        isSubmitting = false; 
+        isSubmitting = false;
         return;
     }
 
     try {
+
         const res = await fetch(GAS_URL, {
             method: "POST",
             headers: {
@@ -2164,49 +2175,56 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (result.status === "ok") {
             alert("🎉 신청 완료!");
+            closeEventPopup();
         } else {
             alert("⚠️ 저장 실패!");
         }
 
-        popup.style.display = "none";
-
-        document.getElementById("eventName").value = "";
-        document.getElementById("eventPhone").value = "";
-
     } catch (err) {
+
         console.error(err);
         alert("서버 오류 발생!");
-    }
 
-    isSubmitting = false;
+    } finally {
+
+        isSubmitting = false;
+
+    }
 });
-    
 
-    // (ticker는 아직 사용 안 하면 유지만)
-    /*
-    function runTicker() {
+// 🎯 건너뛰기 버튼
+document.getElementById("eventSkip").addEventListener("click", () => {
 
-        bottomEl.textContent = bottomNotices[i];
+    closeEventPopup();
 
-        const width = bottomEl.offsetWidth;
+});
 
-        bottomEl.style.transition = "none";
 
-        bottomEl.style.transform = `translateX(${width}px)`;
+// (ticker는 아직 사용 안 하면 유지만)
+/*
+function runTicker() {
 
-        void bottomEl.offsetWidth;
+    bottomEl.textContent = bottomNotices[i];
 
-        bottomEl.style.transition = "transform 10s linear";
+    const width = bottomEl.offsetWidth;
 
-        bottomEl.style.transform = `translateX(-${width}px)`;
+    bottomEl.style.transition = "none";
 
-        i = (i + 1) % bottomNotices.length;
+    bottomEl.style.transform = `translateX(${width}px)`;
 
-        setTimeout(runTicker, 9700);
-    }
+    void bottomEl.offsetWidth;
 
-    runTicker();
-    */
+    bottomEl.style.transition = "transform 10s linear";
+
+    bottomEl.style.transform = `translateX(-${width}px)`;
+
+    i = (i + 1) % bottomNotices.length;
+
+    setTimeout(runTicker, 9700);
+}
+
+runTicker();
+*/
 
 });
 

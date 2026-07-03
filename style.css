@@ -498,6 +498,17 @@ body{
     color: #00d9ff;
     font-weight: bold;
 }
+
+.event-buttons{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-top:15px;
+}
+
+.event-buttons button{
+    flex:1;
+}
 /*////////////////////////////////////////////////////////////////// 여기부터 뉴스 슬라이드 글 변경 끝 */
 
 /* =========================
@@ -567,7 +578,7 @@ body{
 
     padding:14px;
 
-    font-size:18px;
+    font-size:13px;  /*////////////////////////////////// 달성! 이벤트 신청 정보를 입력해주세요. 관련 코드 */
     font-weight:bold;
 
     border:none;
