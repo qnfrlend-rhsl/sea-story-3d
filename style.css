@@ -550,7 +550,7 @@ body{
 
     margin-bottom:15px;
     color:#ff9800;
-    font-size:22px;
+    font-size:22px;      /*/////////////////////////////// 이벤트 당첨! 축하합니다  라는 문구 크기 코드 */
 }
 
 .score-event-box p{
