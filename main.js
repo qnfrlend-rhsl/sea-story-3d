@@ -1673,10 +1673,10 @@ function animate() {
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && eventCooldown > 30){ ///////// 이벤트 물고기 나오는 시간 코드  60은 1분, 300은 5분
+    if (!currentEvent && eventCooldown > 60){ ///////// 이벤트 물고기 나오는 시간 코드  60은 1분, 300은 5분
 
     const r = Math.random();
-    if (r < 1.0) {  /////////////////////////////////////// 전체 이벤트 물고기 나올 확률 1.0는 100%를 뜻함.
+    if (r < 0.9) {  /////////////////////////////////////// 전체 이벤트 물고기 나올 확률 0.9는 90%를 뜻함.
         const rr = Math.random();
 
 
@@ -1929,10 +1929,10 @@ function animate() {
                      sounds.shark_spawn.pause();
                      sounds.shark_spawn.currentTime = 0;
 
-                     //endEvent();
+                     endEvent();
                     }
 
-                // sharkDie();
+                 //sharkDie();
                 
 
                 scene.remove(fish);
@@ -1972,19 +1972,19 @@ function animate() {
                 if (fish.userData.type === "turtle") {
                     sounds.turtle_theme.pause();
                     sounds.turtle_theme.currentTime = 0;
-                    //endEvent();
+                    endEvent();
                 }
                 
                 if (fish.userData.type === "shark") {
                     sounds.shark_spawn.pause();
                     sounds.shark_spawn.currentTime = 0;
-                    //endEvent();
+                    endEvent();
                 }
                 
                 if (fish.userData.type === "whale") {
                     sounds.whale_theme.pause();
                     sounds.whale_theme.currentTime = 0;
-                    //endEvent();
+                    endEvent();
                 }
 
                 scene.remove(fish);
