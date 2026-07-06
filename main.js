@@ -46,7 +46,7 @@ const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 70;////////////////////////////////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 50;////////////////////////////////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 
 function endEvent() {
@@ -1687,7 +1687,7 @@ function animate() {
     if (!currentEvent && eventCooldown > 60){ ///////// 이벤트 물고기 나오는 시간 코드  60은 1분, 300은 5분
 
     const r = Math.random();
-    if (r < 0.9) {  /////////////////////////////////////// 전체 이벤트 물고기 나올 확률 0.9는 90%를 뜻함.
+    if (r < 0.6) {  /////////////////////////////////////// 전체 이벤트 물고기 나올 확률 0.6는 60%를 뜻함.
         const rr = Math.random();
 
 
