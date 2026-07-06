@@ -1653,8 +1653,19 @@ function showScoreEventPopup(eventScore) {
     const popup = document.getElementById("scoreEventPopup");
     const message = document.getElementById("eventMessage");
 
-    message.textContent =
-        `${eventScore.toLocaleString()}점 달성!\n이벤트 신청 정보를 입력해주세요.`;
+    message.innerHTML = `
+    ${eventScore.toLocaleString()}점 달성!<br>
+    이벤트 신청 정보를 입력해주세요.<br><br>
+    <span style="
+        font-size: 18px;
+        font-weight: bold;
+        color: #ff3b30;
+    ">
+        신청 후 문자주세요.<br>
+        📞 010-8429-5368
+    </span>
+`;
+
 
     popup.dataset.score = eventScore;
 
