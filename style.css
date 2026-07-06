@@ -356,7 +356,7 @@ body{
 
     text-shadow: 0 0 10px rgba(255,79,216,0.6);
 }
-/*//////////////////////////////////////////////////////////////////// 🔥 게임 상단에 이벤트 변경 시작 */
+/*//////////////////////////////////////////////////////////////////// 🔥 게임 상단에 이벤트 내용 시작 */
 #topNotice{
     position:absolute;
     top:50px;
@@ -481,22 +481,28 @@ body{
     gap:50px;
     white-space:nowrap;
     padding-left:100%;
-    animation: tickerMove 12s linear infinite;   /*//////////////////////  뉴스 슬라이드 속도 조절 코드 */
-    color: #ffffff; 
+    animation: tickerMove 20s linear infinite;   /*////////////////////  뉴스 슬라이드 속도 조절 코드 */
+    color: #ffffff;  /*////////////////////////////////////  뉴스 슬라이드 흰색으로 나오는 글 색상 */
 }
 
 @keyframes tickerMove {
     0% { transform: translateX(0); }
     100% { transform: translateX(-100%); }
 }
-.hot {
+.hot {  /*////////////////////////////////////////////////////  뉴스 슬라이드 황금색으로 나오는 글 색상 */
     color: rgb(252, 206, 82);
     font-weight: 900;
-    text-shadow: 0 0 10px rgb(248, 162, 3);
+    /* text-shadow: 0 0 10px rgb(248, 162, 3); */
 }
 
-.event {
+.event {  /*///////////////////////////////////////////////////  뉴스 슬라이드 형광으로 나오는 글 색상 */
     color: #00d9ff;
+    font-weight: bold;
+}
+
+
+.ticker .blue {  /*////////////////////////////////////////////  뉴스 슬라이드 노랑으로 나오는 글 색상 */
+    color: rgb(255, 247, 136);
     font-weight: bold;
 }
 
@@ -506,6 +512,7 @@ body{
     justify-content:center;
     margin-top:15px;
 }
+
 
 .event-buttons button{
     flex:1;
