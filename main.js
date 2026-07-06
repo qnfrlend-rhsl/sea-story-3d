@@ -520,7 +520,7 @@ function spinSlot() {
     if (spinCount <= 0) return;
 
     spinCount--;
-    score -= 200;////////////////////////////////////////////////////////////////////// 슬롯 돌리는 금액
+    score -= 200;/////////////////////////////////////////////////////////////// 슬롯 돌리는 금액
     updateUI();
 
     currentSlotSound = sounds.slot_spin.cloneNode();
@@ -561,7 +561,7 @@ spinBtn.addEventListener("click", spinSlot);
 
 const fireBtn = document.getElementById("fireBtn");
 
-//scene.add(new THREE.AxesHelper(10));     ///////////////////////////////////    화면에 중심을 알려주는 좌표
+//scene.add(new THREE.AxesHelper(10));     //////////////////////////    화면에 중심을 알려주는 좌표
 
 /* 🌊 배경 + 안개 */
 const textureLoader = new THREE.TextureLoader();
@@ -570,7 +570,7 @@ textureLoader.load("./bg.png", (texture) => {
     texture.colorSpace = THREE.SRGBColorSpace;
     scene.background = texture;
 });
-scene.fog = new THREE.Fog(0x003355, 30, 120); //////////////////////////////////// 👈 살짝 완화 (빛 보이게)
+scene.fog = new THREE.Fog(0x003355, 30, 120); ///////////////////////////// 👈 살짝 완화 (빛 보이게)
 
 /* 🌞 조명 */
 scene.add(new THREE.AmbientLight(0xffffff, 1.5));
@@ -627,13 +627,13 @@ function createBeam(x, z) {
 
 /* 🎥 카메라 */
 const camera = new THREE.PerspectiveCamera(
-    32,   /////////////////////////////////////////////////////////////////////////// 기본 줌 가장 중요한 줌
+    32,   ////////////////////////////////////////////////////////////////// 기본 줌 가장 중요한 줌
     oceanArea.clientWidth / oceanArea.clientHeight,
     0.1,
     100
 );
 
-camera.position.set(0, 25, 45);  //////////////////////////////////////////////////////// 거리줌 카메라 이동
+camera.position.set(0, 25, 45);  /////////////////////////////////////////////// 거리줌 카메라 이동
 camera.lookAt(1.5, 0, 0);
 
 scene.add(camera);
@@ -812,7 +812,7 @@ const floorBubbles = [];
 function spawnFloorBubble() {
 
     const bubble = new THREE.Mesh(
-        new THREE.SphereGeometry(0.05 + Math.random() * 0.25, 6, 6),   /////////////////////// 기포 크기 조절
+        new THREE.SphereGeometry(0.05 + Math.random() * 0.25, 6, 6),   ////////////// 기포 크기 조절
         new THREE.MeshBasicMaterial({
             color: 0x4f8fb3,
             transparent: true,
@@ -1015,7 +1015,7 @@ function spawnHitEffect(pos) {
         const isBlood = i < BLOOD_COUNT;
 
         const mat = new THREE.MeshBasicMaterial({
-            color: isBlood ? 0xcc0000 : 0xcc0000,  //////////////////////////////////// 죽을 때 나오는 피방울
+            color: isBlood ? 0xcc0000 : 0xcc0000,  /////////////////////////// 죽을 때 나오는 피방울
             transparent: true,
             opacity: 1
         });
@@ -1036,7 +1036,7 @@ function spawnHitEffect(pos) {
     effects.push(group);
 }
 
-function spawnDeathEffect(pos) {   ///////////////////////////////////////////////////  핏방울 퍼지는 코드
+function spawnDeathEffect(pos) {   ////////////////////////////////////////////  핏방울 퍼지는 코드
 
     const group = new THREE.Group();
     const geo = new THREE.SphereGeometry(0.15, 6, 6);
@@ -1073,7 +1073,7 @@ function spawnDeathEffect(pos) {   /////////////////////////////////////////////
 
 function spawnFish() {
 
-      if (fishes.length >= MAX_FISH) return;  ////////////////////////////주석을 풀면 고기는 30마리로 한정됨.
+      if (fishes.length >= MAX_FISH) return;  //////////////////////주석을 풀면 고기는 30마리로 한정됨.
 
     const normalFishCount = fishes.reduce((count, f) => {
     return count + (f.userData?.type === "normal" ? 1 : 0);
@@ -1097,7 +1097,7 @@ function spawnFish() {
     fish.scale.set(modelInfo.scale, modelInfo.scale, modelInfo.scale);
 
     const randomX = (Math.random() - 0.5) * BOUNDS.x;
-    const randomY = -2 + Math.random() * 1;  ////////////////////////////////////////  물고기가 떠있는 공간
+    const randomY = -2 + Math.random() * 1;  ///////////////////////////////////  물고기가 떠있는 공간
     const randomZ = (Math.random() - 0.5) * BOUNDS.z;
 
     const side = Math.floor(Math.random() * 6);
@@ -1153,7 +1153,7 @@ switch (side) {
 
     fish.userData.target.set(
     (Math.random() - 0.5) * 10,
-    -3 + Math.random() * 10,    //////////////////////////////////////  물고기가 위로 가는것을 제한하는 코드
+    -3 + Math.random() * 10,    ////////////////////////////////  물고기가 위로 가는것을 제한하는 코드
     (Math.random() - 0.5) * 10
 );
 
@@ -1188,11 +1188,11 @@ function startTurtleEvent() {
 
     const turtle = spawnSpecialFish(TURTLE);
 
-    addScore(500);//////////////////////////////////////////////////  거북이 출현하면 기본적으로 주는 보너스
+    addScore(500);///////////////////////////////////////////  거북이 출현하면 기본적으로 주는 보너스
     showBonusEvent("🐢 TURTLE BONUS!", "20px");
 
 /*
-///////////////////////////////////////////////////////////////// 여기부터 시간 안에 못 잡으면 사라지는 코드
+/////////////////////////////////////////////////////////// 여기부터 시간 안에 못 잡으면 사라지는 코드
     setTimeout(() => {
     if (currentEvent === "TURTLE") {
 
@@ -1210,7 +1210,7 @@ function startTurtleEvent() {
         });
        }
      }, 30000);                     ////////////////////////////////3000  (현재 30초)
-     ///////////////////////////////////////////////////////////  여기까지 시간 안에 잡지못하면 사라짐 코드
+     //////////////////////////////////////////////////////  여기까지 시간 안에 잡지못하면 사라짐 코드
 */
     }
 /* =========================
@@ -1231,11 +1231,11 @@ function startSharkEvent() {
 
     spawnSpecialFish(SHARK);
 
-    addScore(500);////////////////////////////////////////////////////  상어 출현하면 기본적으로 주는 보너스
+    addScore(500);//////////////////////////////////////////////  상어 출현하면 기본적으로 주는 보너스
     showBonusEvent("🦈 SHARK HUNT!", "20px");
 
 /*
-////////////////////////////////////////////////////////////////// 여기부터 시간 안에 못 잡으면 사라지는 코드
+//////////////////////////////////////////////////////////// 여기부터 시간 안에 못 잡으면 사라지는 코드
     setTimeout(() => {
     if (currentEvent === "SHARK") {
         sounds.shark_spawn.pause();
@@ -1251,8 +1251,8 @@ function startSharkEvent() {
             }
         });
        }
-     }, 30000);                     ////////////////////////////////3000  (현재 30초)
-     ///////////////////////////////////////////////////////////////  여기까지 시간 안에 잡지못하면 사라짐 코드
+     }, 30000);   ////////////////////////////////3000  (현재 30초)
+     //////////////////////////////////////////////////////////  여기까지 시간 안에 잡지못하면 사라짐 코드
 */
 
     }
@@ -1281,7 +1281,7 @@ function startWhaleEvent() {
 
     setTimeout(() => {
         endWhaleEvent();
-    }, 30000);/////////////////////////////////////////////////////////  고래 출현하면 기본적으로 주는 보너스
+    }, 30000);///////////////////////////////////////////////////  고래 출현하면 기본적으로 주는 보너스
 }
 
 function endWhaleEvent() {
@@ -1366,7 +1366,7 @@ setNewTarget(fish);
    GUN + AIM + SHOOT
 ========================= */
 
-const cannonBase = new THREE.Group();   ////////////////////////////////////// 화면에서 보이이는 대포의 위치
+const cannonBase = new THREE.Group();   ///////////////////////////////// 화면에서 보이이는 대포의 위치
 
 cannonBase.position.set(
     0,
@@ -1404,7 +1404,7 @@ cannonBarrel.position.y = 0.5;
 
 cannonBase.add(cannonBarrel);
 
-const muzzle = new THREE.Object3D();   /////////////////////////////////////////  충구에서 나오는 물방울 거리
+const muzzle = new THREE.Object3D();   ///////////////////////////////////  충구에서 나오는 물방울 거리
 
 muzzle.position.set(
     0.9,

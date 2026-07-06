@@ -481,7 +481,7 @@ body{
     gap:50px;
     white-space:nowrap;
     padding-left:100%;
-    animation: tickerMove 20s linear infinite;   /*////////////////////  뉴스 슬라이드 속도 조절 코드 */
+    animation: tickerMove 25s linear infinite;   /*////////////////////  뉴스 슬라이드 속도 조절 코드 */
     color: #ffffff;  /*////////////////////////////////////  뉴스 슬라이드 흰색으로 나오는 글 색상 */
 }
 
