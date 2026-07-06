@@ -28,10 +28,10 @@ let turtleVolume = 0.5;
 let sharkVolume = 0.5;
 
 ////////////////////////////////////////////////////////////////// 이벤트 달성! 축하와 업데이트할 수 있는 코드
+
 const scoreEvents = [
     1000,
-    10000,
-    100000,
+    500000,
     1000000,
     
 ];
@@ -2084,6 +2084,8 @@ function animate() {
 
     function startNoticeCycle() {
 
+////////////////////////////////////////////////////////////////// 게임 상단 광고 문구 코드  ////////////
+
     const notices = [
         "✨SCORE 100만 달성 시 대박선물!✨",
         "✨보너스 타임 진행 중!✨",
@@ -2121,12 +2123,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
     startNoticeCycle();
 
-    const bottomNotices = [
+/*  주석처리 중~~
+    const bottomNotices = [  ////////////////////////////////////////////  ///// 화면 중간 슬라이드 광고줄
         "🎯 100만 SCORE 달성 시 업비트 자동프로그램 증정!",
-        "💰 보너스 타임 진행 중!",
         "🐋 대형 이벤트 등장 확률 상승!",
+        "💰 이벤트 고기를 잡아라!",
         "🔥 매일 이벤트 진행중!"
     ];
+*/
 
     const bottomEl = document.getElementById("bottomNotice");
 
