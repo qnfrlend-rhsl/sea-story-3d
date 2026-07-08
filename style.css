@@ -604,3 +604,10 @@ body{
 
     background:#1976d2;
 }
+
+.sponsor {   /*////////////////////////////////// 슬라이드 광고 간격 주는 코드 */
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  color: #fffffd;
+}
