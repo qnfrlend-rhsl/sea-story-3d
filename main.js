@@ -795,8 +795,8 @@ const FISH_MODELS = [
     // ======================
     // 🦈🐋🐢 이벤트 물고기 (통합됨)
     // ======================
-    { url: "./models/turtle.glb", weight: 0.2, speed: 0.05, turnSpeed: 0.03, scale: 0.010, hp: 100, score: 1000, spawnBonus: 500, type: "turtle" },
-    { url: "./models/shark.glb", weight: 0.1, speed: 0.08, turnSpeed: 0.03, scale: 5, hp: 200, score: 3000, spawnBonus: 500, type: "shark" },
+    { url: "./models/turtle.glb", weight: 0.2, speed: 0.05, turnSpeed: 0.03, scale: 0.010, hp: 70, score: 1000, spawnBonus: 500, type: "turtle" },
+    { url: "./models/shark.glb", weight: 0.1, speed: 0.08, turnSpeed: 0.03, scale: 5, hp: 100, score: 3000, spawnBonus: 500, type: "shark" },
     { url: "./models/whale.glb", weight: 0.01, speed: 0.1, turnSpeed: 0.03, scale: 2.5, hp: 999, score: 10000, spawnBonus: 10000, type: "whale" }
 ];
 
