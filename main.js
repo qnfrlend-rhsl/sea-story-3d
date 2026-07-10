@@ -788,7 +788,7 @@ const FISH_MODELS = [
     //{ url: "./models/fish9.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.0035, hp: 20, score: 20, type: "normal" },
     //{ url: "./models/fish10.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.004, hp: 15, score: 10, type: "normal" },
     //{ url: "./models/fish11.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 70, hp: 30, score: 30, type: "normal" },
-    { url: "./models/fish12.glb", weight: 10, speed: 0.05, turnSpeed: 0.03, scale: 0.5, hp: 15, score: 30, type: "normal" },
+    { url: "./models/fish12.glb", weight: 10, speed: 0.05, turnSpeed: 0.03, scale: 0.5, hp: 15, score: 20, type: "normal" },
     //{ url: "./models/fish13.glb", weight: 10, speed: 0.03, turnSpeed: 0.01, scale: 10, hp: 50, score: 50, type: "normal" },
 
 
