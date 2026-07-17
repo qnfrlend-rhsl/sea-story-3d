@@ -31,12 +31,35 @@ let sharkVolume = 0.5;
 
 const scoreEvents = [
     200000,
-    1000000,
-    
+    1000000    
 ];
 
 const scoreEventTriggered = new Set();
 
+///////////////////////////////////////////////////////////////////////////////////////// 럭키7 광고창 시작
+
+const lucky7Scores = [
+    30000,
+    60000,
+    90000,
+    120000,
+    150000,
+    180000,
+    210000,
+    240000,
+    270000,
+    300000,
+    330000,
+    360000,
+    390000,
+    420000,
+    450000,
+    480000,
+    500000
+];
+
+const lucky7Triggered = new Set();
+/////////////////////////////////////////////////////////////////////////////////////////// 럭키7 광고창 끝
 
 
 const MAX_EFFECTS = 10;
@@ -70,6 +93,21 @@ function addScore(value) {
             break;
         }
     }
+/////////////////////////////////////////////////////////////////////////// 럭키7 광고창 시작
+    for (const luckyScore of lucky7Scores) {
+
+        if(score >= luckyScore && !lucky7Triggered.has(luckyScore)){
+
+            lucky7Triggered.add(luckyScore);
+
+            showLucky7();
+
+            break;
+        }
+    }
+
+/////////////////////////////////////////////////////////////////////////// 럭키7 광고창 끝
+
 
     updateSpinCount();   // ⭐ 스핀 자동 갱신
     updateUI();          // ⭐ 화면 갱신
