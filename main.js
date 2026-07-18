@@ -31,6 +31,7 @@ let sharkVolume = 0.5;
 
 const scoreEvents = [
     200000,
+    500000,
     1000000    
 ];
 
@@ -55,7 +56,7 @@ const lucky7Scores = [
     420000,
     450000,
     480000,
-    500000
+    520000
 ];
 
 const lucky7Triggered = new Set();
@@ -68,7 +69,7 @@ const MAX_BULLETS = 20;
 const tempVec1 = new THREE.Vector3();
 const tempVec2 = new THREE.Vector3();
 const BOUNDS = { x: 50, y: 10, z: 50 };
-const MAX_FISH = 30;////////////////////////////////////////////////////////////////////// 물고기 나오는 숫자
+const MAX_FISH = 30;//////////////////////////////////////////////////////////////////// 물고기 나오는 숫자
 const FLOOR_Y = -3;
 
 function endEvent() {
@@ -106,7 +107,7 @@ function addScore(value) {
         }
     }
 
-/////////////////////////////////////////////////////////////////////////// 럭키7 광고창 끝
+/////////////////////////////////////////////////////////////////////////////// 럭키7 광고창 끝
 
 
     updateSpinCount();   // ⭐ 스핀 자동 갱신
@@ -219,7 +220,7 @@ function startBGM() {
     }
 }
 function updateSpinCount() {
-    spinCount = Math.floor(score / 100);
+    spinCount = Math.floor(score / 200);   /////////////////////////////// 스핀 돌리는 계산 코드
 }
 
 function updateUI() {
@@ -289,9 +290,9 @@ const scene = new THREE.Scene();
 
 
 
-///////////////////////////////////////////////////////////
-///////////////////////슬롯 코드////////////////////////////
-///////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+///////////////////////  슬롯 코드 시작  ////////////////////////////
+////////////////////////////////////////////////////////////////////
 
 
 const SLOT_CONFIG = {
@@ -484,14 +485,14 @@ if (win === "JACKPOT") {
 
 else if (win === "BIGWIN") {
 
-    addScore(3000);
+    addScore(5000);
     playSfx(sounds.big_win, 2.0);
     showBonusEvent("💰 BIG WIN!", "26px");
 }
 
 else if (win === "SMALLWIN") {
 
-    addScore(1000);
+    addScore(2000);
     playSfx(sounds.small_win, 2.0);
     showBonusEvent("🔥 SMALL WIN!", "22px");
 }
@@ -557,7 +558,7 @@ function spinSlot() {
     if (spinCount <= 0) return;
 
     spinCount--;
-    score -= 200;/////////////////////////////////////////////////////////////// 슬롯 돌리는 금액
+    score -= 200;/////////////////////////////////////////////////////////// 슬롯 돌리는 스코어 금액
     updateUI();
 
     currentSlotSound = sounds.slot_spin.cloneNode();
@@ -592,9 +593,9 @@ function spinSlot() {
 spinBtn.addEventListener("click", spinSlot);
 
 
-////////////////////////////////////////////////////////////
-///////////////////////슬롯 코드////////////////////////////
-///////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+/////////////////////  슬롯 코드 끝  ////////////////////////////
+////////////////////////////////////////////////////////////////
 
 const fireBtn = document.getElementById("fireBtn");
 
@@ -826,7 +827,7 @@ const FISH_MODELS = [
     //{ url: "./models/fish9.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 0.0035, hp: 20, score: 20, type: "normal" },
     //{ url: "./models/fish10.glb", weight: 20, speed: 0.050, turnSpeed: 0.08, scale: 0.004, hp: 15, score: 10, type: "normal" },
     //{ url: "./models/fish11.glb", weight: 10, speed: 0.050, turnSpeed: 0.08, scale: 70, hp: 30, score: 30, type: "normal" },
-    { url: "./models/fish12.glb", weight: 10, speed: 0.05, turnSpeed: 0.03, scale: 0.5, hp: 15, score: 20, type: "normal" },
+    { url: "./models/fish12.glb", weight: 10, speed: 0.05, turnSpeed: 0.03, scale: 0.5, hp: 10, score: 20, type: "normal" },
     //{ url: "./models/fish13.glb", weight: 10, speed: 0.03, turnSpeed: 0.01, scale: 10, hp: 50, score: 50, type: "normal" },
 
 
@@ -1647,7 +1648,7 @@ function spawnMuzzleBubbles(pos) {
     for (let i = 0; i < 20; i++) {
 
         const bubble = new THREE.Mesh(
-            new THREE.SphereGeometry(0.05, 6, 6),   ////////////////////////////  총구에서 나오는 기포 효과
+            new THREE.SphereGeometry(0.05, 6, 6),   ///////////////////////////  총구에서 나오는 기포 효과
             new THREE.MeshBasicMaterial({
                 color: 0xffffff,
                 transparent: true,
@@ -1721,15 +1722,15 @@ function animate() {
     requestAnimationFrame(animate);
 
     const delta = clock.getDelta();
-     /////////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
+     ///////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
     
     eventTimer += delta;
     eventCooldown += delta;
 
-    if (!currentEvent && eventCooldown > 60){ ///////// 이벤트 물고기 나오는 시간 코드  60은 1분, 300은 5분
+    if (!currentEvent && eventCooldown > 60){ /////// 이벤트 물고기 나오는 시간 코드  60은 1분, 300은 5분
 
     const r = Math.random();
-    if (r < 0.6) {  /////////////////////////////////////// 전체 이벤트 물고기 나올 확률 0.6는 60%를 뜻함.
+    if (r < 0.6) {  ///////////////////////////////////// 전체 이벤트 물고기 나올 확률 0.6는 60%를 뜻함.
         const rr = Math.random();
 
 
@@ -1740,7 +1741,7 @@ function animate() {
 
     eventCooldown = 0;
    }
-    //////////////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
+    ///////////////////////////////////////////////////////// 이벤트 물고기 대량출물 수정할 때 쓰는 코드
 
     mixers.forEach(m => m.update(delta));
 
@@ -1787,7 +1788,7 @@ function animate() {
     shootTimer += delta;
     if (gameMode === "PLAY" && shooting && shootTimer > fireRate) {
         shootTimer = 0;
-        for (let i = 0; i < 4; i++) {      /////////////////////////////////////////////////총알 증가하는 코드
+        for (let i = 0; i < 4; i++) {      ///////////////////////////////////////////총알 증가하는 코드
          setTimeout(() => shoot(), i * 50);
       }
     }
@@ -1962,7 +1963,7 @@ function animate() {
         // 🦈 SHARK
         if (fish.userData.type === "shark") {
 
-            fish.userData.hp -= 1;   //////////////////////////////////////////////////  상어 총알 타격치 수치
+            fish.userData.hp -= 1;   ///////////////////////////////////////////  상어 총알 타격치 수치
 
             // ❌ 삭제됨: fish.scale.multiplyScalar(0.999);
 
@@ -1976,7 +1977,7 @@ function animate() {
                 }
 
                     playHit();
-                    addScore(3000); /////////////////////////////////////////////////  상어 잡으면 주는 보너스
+                    addScore(3000); //////////////////////////////////////////  상어 잡으면 주는 보너스
 
                     if (fish.userData.type === "shark") {
                      sounds.shark_spawn.pause();
@@ -2021,7 +2022,7 @@ function animate() {
                 }
 
                 playHit();
-                addScore(fish.userData.score);   ////////////////////////////////// 거북이 잡으면 주는 보너스. 
+                addScore(fish.userData.score);   /////////////////////////// 거북이 잡으면 주는 보너스. 
                 if (fish.userData.type === "turtle") {
                     sounds.turtle_theme.pause();
                     sounds.turtle_theme.currentTime = 0;
@@ -2065,7 +2066,7 @@ function animate() {
         g.children.forEach(p => {
 
             p.position.add(p.userData.velocity);
-            p.userData.velocity.y -= 0.0;  ///////////////////////////////// 총알 발사될 때 물방울이 나오는 것
+            p.userData.velocity.y -= 0.0;  ///////////////////////// 총알 발사될 때 물방울이 나오는 것
             p.material.opacity -= 0.03;
 
             if (p.material.opacity > 0) alive = true;
@@ -2126,7 +2127,7 @@ function animate() {
 
     function startNoticeCycle() {
 
-////////////////////////////////////////////////////////////////// 게임 상단 광고 문구 코드  ////////////
+////////////////////////////////////////////////////////////// 게임 상단 광고 문구 코드  ////////////
 
     const notices = [
         "✨SCORE 100만 달성 시 대박선물!✨",
@@ -2166,7 +2167,7 @@ window.addEventListener("DOMContentLoaded", () => {
     startNoticeCycle();
 
 /*  주석처리 중~~
-    const bottomNotices = [  ////////////////////////////////////////////  ///// 화면 중간 슬라이드 광고줄
+    const bottomNotices = [  ////////////////////////////////////////////// 화면 중간 슬라이드 광고줄
         "🎯 100만 SCORE 달성 시 업비트 자동프로그램 증정!",
         "🐋 대형 이벤트 등장 확률 상승!",
         "💰 이벤트 고기를 잡아라!",
