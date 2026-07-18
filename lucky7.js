@@ -5,14 +5,14 @@ const luckySites = [
         name:"우동폰",
         image:"lucky7-images/udongpon.png",
         url:"https://udongpon.netlify.app/",
-        desc:"스마트한 정보와 다양한 콘텐츠를 만나보세요."
+        desc:"다양한 할인 혜택을 한곳에! 할인정보 플랫폼."
     },
 
     {
-        name:"Sea Story",
-        image:"lucky7-images/sea-story.png",
-        url:"https://sea-story-3d-rhsl.netlify.app/",
-        desc:"시원한 바다 테마와 재미있는 게임을 즐겨보세요."
+        name:"머니마켓",
+        image:"lucky7-images/머니마켓.png",
+        url:"https://money-market-homepage-rhsl.netlify.app/",
+        desc:"스마트한 정보와 다양한 콘텐츠를 만나보세요."
     },
 
     {
