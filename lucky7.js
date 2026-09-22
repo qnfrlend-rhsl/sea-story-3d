@@ -4,7 +4,7 @@ const luckySites = [
     {
         name:"우동폰",
         image:"lucky7-images/udongpon.png",
-        url:"https://udongpon.netlify.app/",
+        url:"https://rhsl-udongpon-template.netlify.app/",
         desc:"다양한 할인 혜택을 한곳에! 할인정보 플랫폼."
     },
 
