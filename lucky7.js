@@ -2,7 +2,7 @@ console.log("🍀 Lucky7 시작");
 const luckySites = [
 
     {
-        name:"우동폰",
+        name:"우리동네할인/쿠폰",
         image:"lucky7-images/udongpon.png",
         url:"https://rhsl-udongpon-template.netlify.app/",
         desc:"다양한 할인 혜택을 한곳에! 할인정보 플랫폼."
