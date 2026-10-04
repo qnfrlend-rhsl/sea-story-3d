@@ -217,6 +217,13 @@ body{
     gap: 10px;
 }
 
+/* 🎰 슬롯 릴 이동 영역 */
+.reel-track {
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+}
+
 .cell {
      width: 60px;
     height: 55px; 
@@ -237,9 +244,37 @@ body{
     align-items: center;
 }
 
+.cell img {   /* ///////////////////////////////// 슬롯 이미지 크기 */
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
 .cell.spinning {
     transform: scale(1.1);
     filter: brightness(2);
+}
+
+/* 🎰 슬롯 릴이 위에서 아래로 흐르는 효과 */
+.col.spinning {
+    overflow: hidden;
+}
+
+.col.spinning .cell {
+    animation: slotFlowDown 0.10s linear infinite;
+}
+
+@keyframes slotFlowDown {
+    0% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        transform: translateY(100%);
+    }
 }
 
 .col {

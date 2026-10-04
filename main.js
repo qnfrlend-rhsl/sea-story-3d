@@ -304,7 +304,29 @@ const SLOT_CONFIG = {
 // =========================
 // 🎯 SYMBOLS (무조건 최상단)
 // =========================
-const symbols = ["🐟","🐠","🐢","🦈","🐋","🪙","⭐","💎"];
+const symbols = [
+    "🐟","🐠","🐢","🦈","🐋",
+    "🪙","⭐","💎","🐡","🦑",
+    "🐙","🦀","🦐","🐬","🐳"
+];
+
+const symbolImages = {
+    "🐟": "./images/fish01.png",
+    "🐠": "./images/fish02.png",
+    "🐢": "./images/fish03.png",
+    "🦈": "./images/fish04.png",
+    "🐋": "./images/fish05.png",
+    "🪙": "./images/fish06.png",
+    "⭐": "./images/fish07.png",
+    "💎": "./images/fish08.png",
+    "🐡": "./images/fish09.png",
+    "🦑": "./images/fish10.png",
+    "🐙": "./images/fish11.png",
+    "🦀": "./images/fish12.png",
+    "🦐": "./images/fish13.png",
+    "🐬": "./images/fish14.png",
+    "🐳": "./images/fish15.png"
+};
 
 // =========================
 // 🎯 랜덤
@@ -314,11 +336,31 @@ function randomSymbol() {
 }
 
 // =========================
+// 🖼️ 슬롯 심볼 이미지 표시
+// =========================
+function renderSymbol(cell, symbol) {
+
+    const imagePath = symbolImages[symbol];
+
+    if (!imagePath) {
+        cell.textContent = symbol;
+        return;
+    }
+
+    cell.innerHTML = "";
+
+    const img = document.createElement("img");
+    img.src = imagePath;
+    img.alt = symbol;
+
+    cell.appendChild(img);
+}
+// =========================
 // 🎰 초기 슬롯 세팅
 // =========================
 function initSlot() {
     document.querySelectorAll(".cell").forEach(cell => {
-        cell.textContent = randomSymbol();
+        renderSymbol(cell, randomSymbol());
     });
 }
 
@@ -400,19 +442,37 @@ function startColSpin(colId) {
 
     const col = document.querySelectorAll(`#${colId} .cell`);
 
-    colIntervals[colId] = setInterval(() => {
+    // 🎰 릴 회전 효과 시작
+    document.getElementById(colId).classList.add("spinning");
 
-        const frame = [
-            randomSymbol(),
-            randomSymbol(),
-            randomSymbol()
-        ];
+    // 🔥 처음에는 빠르게
+    let intervalTime = 40;
 
-        col.forEach((cell, r) => {
-            cell.textContent = frame[r];
-        });
+function spinFrame() {
 
-    }, 60);
+    if (!slotRunning) return;
+
+    const frame = [
+        randomSymbol(),
+        randomSymbol(),
+        randomSymbol()
+    ];
+
+    col.forEach((cell, r) => {
+        renderSymbol(cell, frame[r]);
+    });
+
+    // 🚀 처음만 빠르게
+    // 🐢 바로 감속
+    // 🐢 점점 아주 느리게
+    if (intervalTime < 500) {
+        intervalTime += 35;
+    }
+
+    colIntervals[colId] = setTimeout(spinFrame, intervalTime);
+}
+
+    spinFrame();
 }
 
 // =========================
@@ -420,40 +480,60 @@ function startColSpin(colId) {
 // =========================
 function stopCol(colId) {
 
-    clearInterval(colIntervals[colId]);
+    // 🔥 현재 회전 예약 중지
+    clearTimeout(colIntervals[colId]);
 
     const colIndex = Number(colId.replace("col", "")) - 1;
     const col = document.querySelectorAll(`#${colId} .cell`);
 
-    let count = 0;
+    // 🐢 마지막 감속 구간
+    let slowCount = 0;
 
-    const t = setInterval(() => {
+function slowStop() {
 
-        const frame = [
-            randomSymbol(),
-            randomSymbol(),
-            randomSymbol()
-        ];
+    slowCount++;
 
-        col.forEach((cell, r) => {
-            cell.textContent = frame[r];
-        });
+    // 🐢 마지막 감속 구간
+    // 점점 더 천천히 한 프레임씩 보여준다.
+    if (slowCount <= 3) {
 
-        count++;
+    const frame = [
+        randomSymbol(),
+        randomSymbol(),
+        randomSymbol()
+    ];
 
-        if (count > 6) {
-            clearInterval(t);
+    col.forEach((cell, r) => {
+        renderSymbol(cell, frame[r]);
+    });
 
-            col.forEach((cell, r) => {
-                cell.textContent = finalGrid[r][colIndex];
-            });
+    // 🐢 마지막 감속
+    const delay = 250 + slowCount * 100;
 
-            onColumnStopped();
-        }
+    colIntervals[colId] = setTimeout(
+        slowStop,
+        delay
+    );
 
-    }, 80);
+    return;
 }
 
+    // 🎯 처음부터 미리 확정해 둔 최종 이미지
+    col.forEach((cell, r) => {
+        renderSymbol(cell, finalGrid[r][colIndex]);
+    });
+
+    // 🎰 릴 회전 효과 종료
+    document.getElementById(colId).classList.remove("spinning");
+
+    // 🔊 릴 정지 효과음
+    playSfx(sounds.slot_stop, 0.8);
+
+    onColumnStopped();
+}
+
+    slowStop();
+}
 // =========================
 // 🎯 릴 종료 감지
 // =========================
@@ -584,10 +664,10 @@ function spinSlot() {
     startColSpin("col3");
     startColSpin("col4");
 
-    setTimeout(() => stopCol("col1"), 1200);
-    setTimeout(() => stopCol("col2"), 2000);
-    setTimeout(() => stopCol("col4"), 3000);
-    setTimeout(() => stopCol("col3"), 3800);
+setTimeout(() => stopCol("col1"), 800);
+setTimeout(() => stopCol("col2"), 1300);
+setTimeout(() => stopCol("col4"), 1800);
+setTimeout(() => stopCol("col3"), 2300);
 }
 
 spinBtn.addEventListener("click", spinSlot);
