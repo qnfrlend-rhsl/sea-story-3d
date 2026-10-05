@@ -264,7 +264,7 @@ body{
 }
 
 .col.spinning .cell {
-    animation: slotFlowDown 0.10s linear infinite;
+    animation: slotFlowDown 0.12s linear infinite;
 }
 
 @keyframes slotFlowDown {

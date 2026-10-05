@@ -445,34 +445,19 @@ function startColSpin(colId) {
     // 🎰 릴 회전 효과 시작
     document.getElementById(colId).classList.add("spinning");
 
-    // 🔥 처음에는 빠르게
-    let intervalTime = 40;
+    colIntervals[colId] = setInterval(() => {
 
-function spinFrame() {
+        const frame = [
+            randomSymbol(),
+            randomSymbol(),
+            randomSymbol()
+        ];
 
-    if (!slotRunning) return;
+        col.forEach((cell, r) => {
+            renderSymbol(cell, frame[r]);
+        });
 
-    const frame = [
-        randomSymbol(),
-        randomSymbol(),
-        randomSymbol()
-    ];
-
-    col.forEach((cell, r) => {
-        renderSymbol(cell, frame[r]);
-    });
-
-    // 🚀 처음만 빠르게
-    // 🐢 바로 감속
-    // 🐢 점점 아주 느리게
-    if (intervalTime < 500) {
-        intervalTime += 35;
-    }
-
-    colIntervals[colId] = setTimeout(spinFrame, intervalTime);
-}
-
-    spinFrame();
+    }, 60);
 }
 
 // =========================
@@ -480,59 +465,31 @@ function spinFrame() {
 // =========================
 function stopCol(colId) {
 
-    // 🔥 현재 회전 예약 중지
-    clearTimeout(colIntervals[colId]);
+    clearInterval(colIntervals[colId]);
+
+        // 🎰 릴 회전 효과 정지
+    document.getElementById(colId).classList.remove("spinning");
 
     const colIndex = Number(colId.replace("col", "")) - 1;
     const col = document.querySelectorAll(`#${colId} .cell`);
 
-    // 🐢 마지막 감속 구간
-    let slowCount = 0;
+    let count = 0;
 
-function slowStop() {
+    const t = setInterval(() => {
 
-    slowCount++;
+        count++;
 
-    // 🐢 마지막 감속 구간
-    // 점점 더 천천히 한 프레임씩 보여준다.
-    if (slowCount <= 3) {
+        if (count > 6) {
+            clearInterval(t);
 
-    const frame = [
-        randomSymbol(),
-        randomSymbol(),
-        randomSymbol()
-    ];
+            col.forEach((cell, r) => {
+                renderSymbol(cell, finalGrid[r][colIndex]);
+            });
 
-    col.forEach((cell, r) => {
-        renderSymbol(cell, frame[r]);
-    });
+            onColumnStopped();
+        }
 
-    // 🐢 마지막 감속
-    const delay = 250 + slowCount * 100;
-
-    colIntervals[colId] = setTimeout(
-        slowStop,
-        delay
-    );
-
-    return;
-}
-
-    // 🎯 처음부터 미리 확정해 둔 최종 이미지
-    col.forEach((cell, r) => {
-        renderSymbol(cell, finalGrid[r][colIndex]);
-    });
-
-    // 🎰 릴 회전 효과 종료
-    document.getElementById(colId).classList.remove("spinning");
-
-    // 🔊 릴 정지 효과음
-    playSfx(sounds.slot_stop, 0.8);
-
-    onColumnStopped();
-}
-
-    slowStop();
+    }, 100);
 }
 // =========================
 // 🎯 릴 종료 감지
@@ -664,10 +621,10 @@ function spinSlot() {
     startColSpin("col3");
     startColSpin("col4");
 
-setTimeout(() => stopCol("col1"), 800);
-setTimeout(() => stopCol("col2"), 1300);
-setTimeout(() => stopCol("col4"), 1800);
-setTimeout(() => stopCol("col3"), 2300);
+    setTimeout(() => stopCol("col1"), 1200);
+    setTimeout(() => stopCol("col2"), 2000);
+    setTimeout(() => stopCol("col4"), 3000);
+    setTimeout(() => stopCol("col3"), 3800);
 }
 
 spinBtn.addEventListener("click", spinSlot);
