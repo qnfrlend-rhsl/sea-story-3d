@@ -32,17 +32,14 @@ body{
     position: relative;
     z-index: 1;
 
-    width: min(100vw, calc(100dvh * 720 / 1280));
-    height: min(100dvh, calc(100vw * 1280 / 720));
-
     aspect-ratio: 720 / 1280;
+    height: 100dvh;
 
     display: flex;
     flex-direction: column;
 
     background: #000;
     overflow: hidden;
-    flex-shrink: 0;
 }
 
 /* 위 4 */
