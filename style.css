@@ -89,7 +89,7 @@ body{
 
     color:white;
 
-    padding-top:10px;
+    padding-top:0px;
 }
 
 #bonusEvent{
@@ -205,9 +205,9 @@ body{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 12px;
+    gap: 5px;  /* ///////////////////// 슬롯 이미지 전체들을 좌우 간격으로 조절하는 코드 */
     margin-top: 10px;  
-    transform: translateY(-10px);  /* /////////////////////////////////// 슬롯 이미지들 전체 위아래로 이동하는 코드 */      
+    transform: translateY(-10px);  /* ///////////////////// 슬롯 이미지들 전체 위아래로 이동하는 코드 */      
 }
 
 .row {
@@ -228,6 +228,7 @@ body{
 .cell {
      width: 60px;
     height: 55px; 
+    margin-bottom: 5px;  /* 슬롯 이미지간의 위아래 간격을 조절하는 코드 */
 
     background: transparent;
     border: none;
@@ -502,15 +503,20 @@ body{
 /*///////////////////////////////////////////////////////////////////// 🔥 게임 상단에 이벤트 변경 끝 */
 
 /*/////////////////////////////////////////////////////////////  여기부터 티커줄광고 글 변경 시작    */
-#bottomNotice {  
-    position:absolute;
-    bottom:300px;     /*////////////////////////// 자막이 위아래로 조절 코드 숫자가 작아지면 아래로 내려옴*/
-    left:50%;
-    transform:translateX(-50%);
+#bottomNotice {
+    position: relative;  /*티커를 일반적인 문서 배치 흐름에 둬. 다른 요소와 겹치도록 강제로 띄우지 않아.*/
+    width: 90%;  /*티커 영역의 너비를 부모 영역의 90%로 설정해.*/
+    margin: 0 auto;  /*좌우 여백을 자동으로 계산해서 가운데 정렬해.*/
+    overflow: hidden;  /*티커 영역 밖으로 나가는 글자를 감춰.*/
+    white-space: nowrap;  /*광고 문구가 다음 줄로 넘어가지 않고 한 줄로 표시되게 해*/
+}
 
-    width:90%;
-    overflow:hidden;
-    white-space:nowrap;
+#noticeGroup {
+    width: 100%;  /*부모 영역의 전체 너비를 사용해.*/
+    display: flex;  /*내부 요소들을 유연하게 배치할 수 있도록 해.*/
+    flex-direction: column;  /*내부 요소들을 세로 방향으로 배치해.*/
+    align-items: center;  /*개인정보 처리방침과 티커를 가로 가운데에 정렬해.*/
+    flex: 0 0 auto;  /*화면 공간이 부족해도 이 묶음의 크기를 임의로 줄이지 않도록 해.*/
 }
 
 .ticker {
