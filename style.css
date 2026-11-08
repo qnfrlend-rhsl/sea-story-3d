@@ -89,7 +89,7 @@ body{
 
     color:white;
 
-    padding-top:0px;   /* 슬롯 전체박스를 이동하는 코드 위 아래로 이동할 수 있는 코드임 */
+    padding-top:0px;   /*///////////////// 슬롯 전체박스를 이동하는 코드 위 아래로 이동할 수 있는 코드임 */
 }
 
 #bonusEvent{
@@ -228,7 +228,7 @@ body{
 .cell {
      width: 60px;
     height: 55px; 
-    margin-bottom: 5px;  /* 슬롯 이미지간의 위아래 간격을 조절하는 코드 */
+    margin-bottom: 5px;  /* ///////////////////////////   슬롯 이미지간의 위아래 간격을 조절하는 코드 */
 
     background: transparent;
     border: none;
